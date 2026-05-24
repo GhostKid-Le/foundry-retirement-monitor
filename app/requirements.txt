@@ -1,0 +1,5 @@
+azure-functions>=1.20
+requests>=2.31
+beautifulsoup4>=4.12
+azure-identity>=1.17
+azure-storage-blob>=12.22

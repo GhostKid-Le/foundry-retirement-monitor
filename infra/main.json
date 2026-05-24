@@ -1,0 +1,423 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.40.2.10011",
+      "templateHash": "10839146856260817310"
+    }
+  },
+  "parameters": {
+    "environmentName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "metadata": {
+        "description": "azd environment name; used as resource prefix"
+      }
+    },
+    "location": {
+      "type": "string",
+      "minLength": 1,
+      "metadata": {
+        "description": "Primary location for all resources"
+      }
+    },
+    "scheduleCron": {
+      "type": "string",
+      "defaultValue": "0 30 8 * * *",
+      "metadata": {
+        "description": "Cron schedule (NCRONTAB, in WEBSITE_TIME_ZONE) — default: 08:30 every day"
+      }
+    },
+    "timeZone": {
+      "type": "string",
+      "defaultValue": "China Standard Time",
+      "metadata": {
+        "description": "Time zone for the timer trigger (Windows TZ ID)"
+      }
+    }
+  },
+  "variables": {
+    "$fxv#0": {
+      "resourcesResourceGroups": "rg-",
+      "storageStorageAccounts": "st",
+      "webServerFarms": "plan-",
+      "webSitesFunctions": "func-",
+      "insightsComponents": "appi-",
+      "operationalInsightsWorkspaces": "log-",
+      "communicationServices": "acs-",
+      "communicationEmailServices": "email-",
+      "managedIdentityUserAssignedIdentities": "id-"
+    },
+    "abbrs": "[variables('$fxv#0')]",
+    "resourceToken": "[toLower(uniqueString(subscription().id, parameters('environmentName'), parameters('location')))]",
+    "tags": {
+      "azd-env-name": "[parameters('environmentName')]",
+      "app": "foundry-retirement-monitor"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/resourceGroups",
+      "apiVersion": "2024-03-01",
+      "name": "[format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))]",
+      "location": "[parameters('location')]",
+      "tags": "[variables('tags')]"
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2025-04-01",
+      "name": "resources",
+      "resourceGroup": "[format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "resourceToken": {
+            "value": "[variables('resourceToken')]"
+          },
+          "tags": {
+            "value": "[variables('tags')]"
+          },
+          "scheduleCron": {
+            "value": "[parameters('scheduleCron')]"
+          },
+          "timeZone": {
+            "value": "[parameters('timeZone')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.40.2.10011",
+              "templateHash": "11016433935638793757"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string"
+            },
+            "resourceToken": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "object"
+            },
+            "scheduleCron": {
+              "type": "string"
+            },
+            "timeZone": {
+              "type": "string"
+            }
+          },
+          "variables": {
+            "$fxv#0": {
+              "resourcesResourceGroups": "rg-",
+              "storageStorageAccounts": "st",
+              "webServerFarms": "plan-",
+              "webSitesFunctions": "func-",
+              "insightsComponents": "appi-",
+              "operationalInsightsWorkspaces": "log-",
+              "communicationServices": "acs-",
+              "communicationEmailServices": "email-",
+              "managedIdentityUserAssignedIdentities": "id-"
+            },
+            "abbrs": "[variables('$fxv#0')]",
+            "blobOwnerRoleId": "b7e6dc6d-f1e8-4753-8033-0f276bb0955b",
+            "queueContribRoleId": "974c5e8b-45b9-4653-ba55-5f855dd0fb88",
+            "tableContribRoleId": "0a9a7e1f-b9d0-4cc4-a60d-0319b160aaa3"
+          },
+          "resources": [
+            {
+              "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+              "apiVersion": "2023-01-31",
+              "name": "[format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken'))]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]"
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts",
+              "apiVersion": "2024-01-01",
+              "name": "[format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken'))]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]",
+              "sku": {
+                "name": "Standard_LRS"
+              },
+              "kind": "StorageV2",
+              "properties": {
+                "allowBlobPublicAccess": false,
+                "minimumTlsVersion": "TLS1_2",
+                "allowSharedKeyAccess": true,
+                "publicNetworkAccess": "Enabled"
+              }
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts/blobServices",
+              "apiVersion": "2024-01-01",
+              "name": "[format('{0}/{1}', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')), 'default')]",
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+              "apiVersion": "2024-01-01",
+              "name": "[format('{0}/{1}/{2}', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')), 'default', 'history')]",
+              "properties": {
+                "publicAccess": "None"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')), 'default')]"
+              ]
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+              "apiVersion": "2024-01-01",
+              "name": "[format('{0}/{1}/{2}', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')), 'default', 'deploymentpackage')]",
+              "properties": {
+                "publicAccess": "None"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')), 'default')]"
+              ]
+            },
+            {
+              "type": "Microsoft.OperationalInsights/workspaces",
+              "apiVersion": "2023-09-01",
+              "name": "[format('{0}{1}', variables('abbrs').operationalInsightsWorkspaces, parameters('resourceToken'))]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]",
+              "properties": {
+                "sku": {
+                  "name": "PerGB2018"
+                },
+                "retentionInDays": 30
+              }
+            },
+            {
+              "type": "Microsoft.Insights/components",
+              "apiVersion": "2020-02-02",
+              "name": "[format('{0}{1}', variables('abbrs').insightsComponents, parameters('resourceToken'))]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]",
+              "kind": "web",
+              "properties": {
+                "Application_Type": "web",
+                "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', format('{0}{1}', variables('abbrs').operationalInsightsWorkspaces, parameters('resourceToken')))]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', format('{0}{1}', variables('abbrs').operationalInsightsWorkspaces, parameters('resourceToken')))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Web/serverfarms",
+              "apiVersion": "2024-04-01",
+              "name": "[format('{0}{1}', variables('abbrs').webServerFarms, parameters('resourceToken'))]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]",
+              "sku": {
+                "name": "FC1",
+                "tier": "FlexConsumption"
+              },
+              "kind": "functionapp,linux",
+              "properties": {
+                "reserved": true
+              }
+            },
+            {
+              "type": "Microsoft.Web/sites",
+              "apiVersion": "2024-04-01",
+              "name": "[format('{0}{1}', variables('abbrs').webSitesFunctions, parameters('resourceToken'))]",
+              "location": "[parameters('location')]",
+              "kind": "functionapp,linux",
+              "tags": "[union(parameters('tags'), createObject('azd-service-name', 'func'))]",
+              "identity": {
+                "type": "UserAssigned",
+                "userAssignedIdentities": {
+                  "[format('{0}', resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken'))))]": {}
+                }
+              },
+              "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', format('{0}{1}', variables('abbrs').webServerFarms, parameters('resourceToken')))]",
+                "httpsOnly": true,
+                "functionAppConfig": {
+                  "deployment": {
+                    "storage": {
+                      "type": "blobContainer",
+                      "value": "[format('{0}{1}', reference(resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken'))), '2024-01-01').primaryEndpoints.blob, 'deploymentpackage')]",
+                      "authentication": {
+                        "type": "UserAssignedIdentity",
+                        "userAssignedIdentityResourceId": "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken')))]"
+                      }
+                    }
+                  },
+                  "runtime": {
+                    "name": "python",
+                    "version": "3.11"
+                  },
+                  "scaleAndConcurrency": {
+                    "instanceMemoryMB": 2048,
+                    "maximumInstanceCount": 40
+                  }
+                },
+                "siteConfig": {
+                  "ftpsState": "Disabled",
+                  "minTlsVersion": "1.2",
+                  "appSettings": [
+                    {
+                      "name": "AzureWebJobsStorage__accountName",
+                      "value": "[format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken'))]"
+                    },
+                    {
+                      "name": "AzureWebJobsStorage__credential",
+                      "value": "managedidentity"
+                    },
+                    {
+                      "name": "AzureWebJobsStorage__clientId",
+                      "value": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken'))), '2023-01-31').clientId]"
+                    },
+                    {
+                      "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                      "value": "[reference(resourceId('Microsoft.Insights/components', format('{0}{1}', variables('abbrs').insightsComponents, parameters('resourceToken'))), '2020-02-02').ConnectionString]"
+                    },
+                    {
+                      "name": "WEBSITE_TIME_ZONE",
+                      "value": "[parameters('timeZone')]"
+                    },
+                    {
+                      "name": "SCHEDULE_CRON",
+                      "value": "[parameters('scheduleCron')]"
+                    },
+                    {
+                      "name": "AZURE_CLIENT_ID",
+                      "value": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken'))), '2023-01-31').clientId]"
+                    },
+                    {
+                      "name": "STORAGE_ACCOUNT_NAME",
+                      "value": "[format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken'))]"
+                    },
+                    {
+                      "name": "HISTORY_CONTAINER",
+                      "value": "history"
+                    },
+                    {
+                      "name": "HISTORY_BLOB",
+                      "value": "foundry_retirement_history.json"
+                    },
+                    {
+                      "name": "SOURCE_URL",
+                      "value": "https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/model-retirement-schedule"
+                    },
+                    {
+                      "name": "WINDOW_DAYS",
+                      "value": "30"
+                    }
+                  ]
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Insights/components', format('{0}{1}', variables('abbrs').insightsComponents, parameters('resourceToken')))]",
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')), 'default', 'deploymentpackage')]",
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')), 'default', 'history')]",
+                "[resourceId('Microsoft.Web/serverfarms', format('{0}{1}', variables('abbrs').webServerFarms, parameters('resourceToken')))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')))]",
+                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken')))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Authorization/roleAssignments",
+              "apiVersion": "2022-04-01",
+              "scope": "[resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')))]",
+              "name": "[guid(resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken'))), resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken'))), variables('blobOwnerRoleId'))]",
+              "properties": {
+                "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', variables('blobOwnerRoleId'))]",
+                "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken'))), '2023-01-31').principalId]",
+                "principalType": "ServicePrincipal"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')))]",
+                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken')))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Authorization/roleAssignments",
+              "apiVersion": "2022-04-01",
+              "scope": "[resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')))]",
+              "name": "[guid(resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken'))), resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken'))), variables('queueContribRoleId'))]",
+              "properties": {
+                "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', variables('queueContribRoleId'))]",
+                "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken'))), '2023-01-31').principalId]",
+                "principalType": "ServicePrincipal"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')))]",
+                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken')))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Authorization/roleAssignments",
+              "apiVersion": "2022-04-01",
+              "scope": "[resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')))]",
+              "name": "[guid(resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken'))), resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken'))), variables('tableContribRoleId'))]",
+              "properties": {
+                "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', variables('tableContribRoleId'))]",
+                "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken'))), '2023-01-31').principalId]",
+                "principalType": "ServicePrincipal"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')))]",
+                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken')))]"
+              ]
+            }
+          ],
+          "outputs": {
+            "functionAppName": {
+              "type": "string",
+              "value": "[format('{0}{1}', variables('abbrs').webSitesFunctions, parameters('resourceToken'))]"
+            },
+            "storageAccountName": {
+              "type": "string",
+              "value": "[format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken'))]"
+            },
+            "userAssignedIdentityClientId": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken'))), '2023-01-31').clientId]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[subscriptionResourceId('Microsoft.Resources/resourceGroups', format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName')))]"
+      ]
+    }
+  ],
+  "outputs": {
+    "AZURE_LOCATION": {
+      "type": "string",
+      "value": "[parameters('location')]"
+    },
+    "AZURE_RESOURCE_GROUP": {
+      "type": "string",
+      "value": "[format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))]"
+    },
+    "AZURE_FUNCTION_NAME": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))), 'Microsoft.Resources/deployments', 'resources'), '2025-04-01').outputs.functionAppName.value]"
+    },
+    "AZURE_STORAGE_ACCOUNT": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))), 'Microsoft.Resources/deployments', 'resources'), '2025-04-01').outputs.storageAccountName.value]"
+    }
+  }
+}

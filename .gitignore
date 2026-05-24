@@ -1,0 +1,42 @@
+# ---- Python ----
+.venv/
+venv/
+__pycache__/
+*.pyc
+.python_packages/
+
+# ---- Azure Functions ----
+local.settings.json
+bin/
+obj/
+
+# ---- azd / Azure CLI ----
+# .azure/ 含订阅 ID 与环境配置，不发布
+.azure/
+
+# ---- 部署 / 构建产物 ----
+deploy.zip
+deploy-result.json
+deploy-code-result.json
+deploy-out.log
+check-func.log
+appsettings.tmp.json
+settings_body.json
+
+# ---- 本地脚本运行输出 ----
+foundry_retirement_report.html
+foundry_retirement_history.json
+local-version/foundry_retirement_report.html
+local-version/foundry_retirement_history.json
+
+# ---- 调试 / 验证临时产物 ----
+response.html
+body.html
+headers.txt
+*.tmp
+*.bak
+
+# ---- IDE / OS ----
+.vscode/
+.DS_Store
+Thumbs.db
