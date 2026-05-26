@@ -1,152 +1,65 @@
 # Foundry Retirement Monitor
 
-每日抓取 [Microsoft Learn — Azure AI Foundry / OpenAI model retirement schedule](https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/model-retirement-schedule) 页面，与昨日快照比较，通过 **Power Automate** 把美观的 HTML 邮件发到你的 Outlook（发件人 = 你自己，而不是 `DoNotReply@...`）。
+每日抓取 [Microsoft Learn — Azure AI Foundry / OpenAI model retirement schedule](https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/model-retirement-schedule)，与昨日快照对比，通过 **Power Automate** 把美观的 HTML 邮件发到 Outlook（发件人 = 你自己），同时把**最新报告**挂在公开 HTTPS URL 上随时浏览。
 
-> 项目特色：
-> - **零 Key**：Function App 跑在 Flex Consumption + 全 Managed Identity 上，订阅级 `disableLocalAuth`/`allowSharedKeyAccess=false` 也兼容。
-> - **零 SMTP / 零 ACS 域名**：邮件经由 Power Automate webhook → Office 365 connector，发件人就是你的 M365 账号。
-> - **公开 HTTP 报告**：除了每日邮件，还暴露 `/api/report` 匿名 URL，可直接分享。
+> **当前形态**：AKS + Application Gateway (AGIC) + cert-manager (Let's Encrypt)。Web 服务一直在线，每日 08:30 CST 由 K8s CronJob 跑抓取+diff+发邮件。
+> 历史版本（Flex Consumption Functions + ACS）已下线，相关代码已从仓库移除。
 
 ---
 
 ## 架构
 
 ```
-┌────────────────────────────┐    08:30 CST    ┌──────────────────────────┐
-│ Azure Functions FC1 (Py3.11) ├────────────────► daily_check (timer)     │
-│ func-znnzcoperxcfc (westus2) │                 └────┬─────────────────┬─┘
-└────────────────────────────┘                       │                 │
-              ▲                                       │ scrape +        │ POST JSON
-              │ GET /api/report                       │ diff vs blob    │ {subject, html}
-              │ (anonymous)                           ▼                 ▼
-        anyone with URL                ┌──────────────────┐   ┌──────────────────────┐
-                                       │ Storage Blob      │   │ Power Automate Flow   │
-                                       │ history/...json   │   │ "Foundry Retirement   │
-                                       │ (MI, no keys)     │   │  Mailer"              │
-                                       └──────────────────┘   │  → Send email (V2)    │
-                                                              │  From: <你>           │
-                                                              │  To:   <收件人列表>   │
-                                                              └──────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────┐
+│ Resource Group: rg-foundry-monitor (westus2)                               │
+│                                                                            │
+│  Internet ─► Public IP (20.59.39.98)                                       │
+│          ─► Application Gateway v2 (agw-foundry-monitor)                   │
+│             ├─ HTTP  :80  → 301 redirect to HTTPS                          │
+│             └─ HTTPS :443 (cert: Let's Encrypt, 自动续期)                  │
+│                  │                                                         │
+│                  ▼  AGIC (AKS addon, UAMI)                                 │
+│             ┌──────────────────────────────────────────────────┐           │
+│             │ AKS: aks-foundry-monitor                          │           │
+│             │  ns foundry-monitor                               │           │
+│             │  ├ Deployment web (uvicorn web:app, /healthz)    │           │
+│             │  ├ Service web :80 → :8000                       │           │
+│             │  ├ Ingress web  (tls=web-tls, host=*.cloudapp..) │           │
+│             │  ├ PVC state    (Azure Files, history.json)      │           │
+│             │  └ CronJob daily-check  30 0 * * * (UTC)         │           │
+│             │       └─ POST JSON → Power Automate webhook      │           │
+│             │  ns cert-manager (v1.15.3)                        │           │
+│             │  ns kube-system: AGIC pod, omsagent               │           │
+│             └──────────────────────────────────────────────────┘           │
+│                                                                            │
+│  ACR: acrfoundrymonitor  (kubelet identity → AcrPull)                      │
+│  Log Analytics: log-foundry-monitor  (Container Insights)                  │
+└────────────────────────────────────────────────────────────────────────────┘
+                  │
+                  ▼  POST {subject, html}
+        ┌──────────────────────────────────┐
+        │ Power Automate flow              │
+        │  → Send email (V2) Office 365    │
+        │     From: 你的 M365 账号         │
+        │     To:   收件人列表（Flow 里维护）│
+        └──────────────────────────────────┘
 ```
 
-### Azure 资源（resource group `rg-foundry-monitor`，westus2）
+**公开访问**：<https://foundry-monitor.westus2.cloudapp.azure.com/>
 
-| 资源 | 名称 | 作用 |
+### Azure 资源（`rg-foundry-monitor` / westus2）
+
+| 资源 | 名称 | 备注 |
 |---|---|---|
-| Function App (FC1, Linux, Py3.11) | `func-znnzcoperxcfc` | timer + http |
-| Storage Account | `stznnzcoperxcfc` | `history/foundry_retirement_history.json` + 部署包；`allowSharedKeyAccess=false` |
-| User-Assigned Managed Identity | `id-znnzcoperxcfc` | 函数访问 storage 的身份 |
-| Application Insights / Log Analytics | `appi-…` / `log-…` | 日志、监控 |
+| AKS | `aks-foundry-monitor` | Standard_D2s_v5 ×2，addons: `omsagent` + `ingressApplicationGateway` |
+| Application Gateway v2 | `agw-foundry-monitor` | autoscale 1-2，PIP `20.59.39.98` |
+| VNet | `vnet-foundry-monitor` (10.30.0.0/16) | `snet-aks` 10.30.0.0/22，`snet-appgw` 10.30.4.0/24 |
+| NSG | `nsg-snet-appgw` | 允许 Internet→80/443、GatewayManager、AzureLoadBalancer |
+| ACR | `acrfoundrymonitor` | kubelet MI 拉取 |
+| Log Analytics | `log-foundry-monitor` | Container Insights |
+| User-Assigned MI | AGIC addon 自动创建 | 已授予 VNet `Network Contributor` |
 
-> ⚠️ 早期版本里挂的 **Azure Communication Services + Email Service**（`acs-znnzcoperxcfc` / `email-znnzcoperxcfc`）**已废弃**，请参考 [docs: 删除 ACS](#可选清理已废弃的-acs-资源)。
-
----
-
-## 快速开始
-
-### 1) 部署基础设施
-
-```powershell
-cd foundry-retirement-monitor
-
-az login
-az account set --subscription <YOUR_SUB>
-
-az bicep build -f .\infra\main.bicep --outfile .\infra\main.json
-
-az deployment sub create `
-  --name foundry-monitor `
-  --location westus2 `
-  --template-file .\infra\main.json `
-  --parameters environmentName=foundry-monitor location=westus2 `
-               recipientAddress=<YOUR_EMAIL> `
-               scheduleCron='0 30 8 * * *' timeZone='China Standard Time'
-```
-
-> `recipientAddress` 只是写进 App Setting 用于日志/调试；**真实收件人列表在 Power Automate Flow 里维护**。
-
-### 2) 创建 Power Automate Flow 并拿 webhook URL
-
-1. 打开 https://make.powerautomate.com → **Create → Automated cloud flow** → trigger 选 **"When a HTTP request is received"**。
-2. Request body schema（直接 paste）：
-   ```json
-   { "type": "object", "properties": { "subject": {"type": "string"}, "html": {"type": "string"} } }
-   ```
-3. Trigger 高级设置 → **Who can trigger the flow = Anyone**。
-4. 加一步 **"Send an email (V2)"** (Office 365 Outlook connector，登录你的 M365 账号)：
-   - **From** = 你（默认）
-   - **To** = `wang.le@microsoft.com; you@example.com`（多人用分号分隔）
-   - **Subject** = `triggerBody()?['subject']`（点 Expression）
-   - **Body** = `triggerBody()?['html']`，并把 Body 输入框右下角切到 **<\/>** code-view（保留 HTML 原文）
-5. **Save**，然后回到第 1 步那个 trigger，复制 **HTTP POST URL**（带 sig= 的长 URL）—— 这就是 webhook。
-
-### 3) 把 webhook URL 写到 Function App
-
-URL 里有 `&` 字符，PowerShell 原生 arg parser 会把它当作命令分隔符**截断**值，即使加引号也会出错。**必须**走 `az rest`：
-
-```powershell
-$webhook = '<paste-your-full-URL-here>'
-$body = @{
-  properties = @{
-    MAILER_WEBHOOK_URL = $webhook
-    # ... 其他要保留的设置（先 az functionapp config appsettings list 拿到 JSON 合并）
-  }
-} | ConvertTo-Json -Depth 5 -Compress
-$body | Out-File settings_body.json -Encoding utf8 -NoNewline
-
-$subId = az account show --query id -o tsv
-az rest --method PUT `
-  --uri "/subscriptions/$subId/resourceGroups/rg-foundry-monitor/providers/Microsoft.Web/sites/func-znnzcoperxcfc/config/appsettings?api-version=2022-03-01" `
-  --body '@settings_body.json'
-
-Remove-Item settings_body.json
-```
-
-验证：
-
-```powershell
-$len = (az functionapp config appsettings list -g rg-foundry-monitor -n func-znnzcoperxcfc `
-        --query "[?name=='MAILER_WEBHOOK_URL'].value | [0]" -o tsv).Length
-"STORED LEN=$len"   # 期望 ~283
-```
-
-### 4) 部署函数代码
-
-```powershell
-Compress-Archive -Path app\host.json,app\function_app.py,app\foundry_monitor.py,app\requirements.txt,app\.funcignore `
-                 -DestinationPath deploy.zip -Force
-az functionapp deployment source config-zip `
-  -g rg-foundry-monitor -n func-znnzcoperxcfc --src deploy.zip --build-remote true
-```
-
-### 5) 手工触发一次建立 baseline
-
-```powershell
-$key = az functionapp keys list -g rg-foundry-monitor -n func-znnzcoperxcfc --query masterKey -o tsv
-Invoke-WebRequest -Uri "https://func-znnzcoperxcfc.azurewebsites.net/admin/functions/daily_check" `
-  -Method POST -Headers @{'x-functions-key'=$key;'Content-Type'='application/json'} -Body '{"input":""}'
-```
-
-3-5 秒后 inbox 应收到 *"首次运行 baseline (N 条)"* 邮件。
-
----
-
-## 运行时环境变量
-
-| 名称 | 是否必须 | 默认 | 说明 |
-|---|---|---|---|
-| `MAILER_WEBHOOK_URL` | **是** | — | Power Automate trigger URL，**不要提交进 git** |
-| `STORAGE_ACCOUNT_NAME` | 是 | — | Bicep 注入；MI 模式 |
-| `AZURE_CLIENT_ID` | 是 | — | UAMI client id；Bicep 注入 |
-| `HISTORY_CONTAINER` | 否 | `history` | blob 容器名 |
-| `HISTORY_BLOB` | 否 | `foundry_retirement_history.json` | blob 文件名 |
-| `SOURCE_URL` | 否 | learn.microsoft.com OpenAI retirement | 抓取源 |
-| `WINDOW_DAYS` | 否 | `30` | 关注未来 N 天内退役的型号 |
-| `SCHEDULE_CRON` | 否 | `0 30 8 * * *` | NCRONTAB，受 `WEBSITE_TIME_ZONE` 影响 |
-| `WEBSITE_TIME_ZONE` | 否 | `China Standard Time` | timer 时区 |
-| ~~`ACS_CONNECTION_STRING`~~ | — | — | **已废弃**，可删 |
-| ~~`SENDER_ADDRESS`~~ | — | — | **已废弃**，可删 |
-| ~~`RECIPIENT_ADDRESS`~~ | — | — | 仅 baseline 用过；收件人现在在 Flow 内 |
+> 部署会出现**第二个**资源组 `MC_rg-foundry-monitor_aks-foundry-monitor_westus2`，由 AKS 自动管理（VMSS、节点 LB、磁盘等），**不要手动改**。
 
 ---
 
@@ -154,85 +67,190 @@ Invoke-WebRequest -Uri "https://func-znnzcoperxcfc.azurewebsites.net/admin/funct
 
 ```
 foundry-retirement-monitor/
-├── app/                              # Function App 源码（云端版）
-│   ├── function_app.py               # daily_check timer + report HTTP
-│   ├── foundry_monitor.py            # 抓取/解析/diff/邮件渲染
-│   ├── host.json
-│   ├── requirements.txt
-│   ├── local.settings.sample.json
-│   └── .funcignore
-├── infra/                            # Bicep IaC
-│   ├── main.bicep                    # 订阅级入口
-│   ├── resources.bicep               # RG 内资源
-│   ├── main.parameters.json
-│   ├── abbreviations.json
-│   └── main.json                     # 编译后 ARM（git ignored OK）
-├── local-version/                    # 独立本地脚本版（无 Azure 依赖）
-│   ├── foundry_retirement_monitor.py
-│   ├── requirements.txt
-│   └── README.md
-├── deploy-infra.ps1 / deploy-code.ps1
-├── trigger-func.ps1 / verify-blob.ps1
-├── azure.yaml                        # azd 元数据（可选）
-├── AGENTS.md                         # 给 AI 助手 / 后续维护者的导览
-├── README.md
-└── .gitignore
+├── app/                       # Python 应用
+│   ├── foundry_monitor.py     # 抓取 / 解析 / diff / 渲染 HTML 邮件
+│   ├── storage.py             # 本地 JSON 历史（PVC 挂 /data）
+│   ├── web.py                 # FastAPI: /  /report  /healthz
+│   ├── daily_job.py           # CronJob 入口：跑一次 diff + 发邮件
+│   └── requirements.txt
+├── Dockerfile                 # python:3.11-slim + tzdata(Asia/Shanghai)
+├── infra/
+│   ├── main.bicep             # AKS + AppGw + VNet + NSG + RBAC（RG 作用域）
+│   └── main.json              # 编译产物
+├── k8s/
+│   ├── 00-namespace.yaml
+│   ├── 10-pvc.yaml            # Azure Files PVC (history.json 持久化)
+│   ├── 20-secret.example.yaml # 复制为 20-secret.yaml 填 webhook URL
+│   ├── 30-web.yaml            # Deployment + Service
+│   ├── 40-ingress.yaml        # AGIC + cert-manager TLS
+│   ├── 50-cronjob.yaml        # 每天 00:30 UTC = 08:30 CST
+│   └── 60-clusterissuer.yaml  # Let's Encrypt prod (HTTP-01 via AppGw)
+├── scripts/                   # PowerShell 助手脚本（部署 / 探活 / 重对账）
+├── page.html                  # 渲染样例（手动预览邮件外观）
+├── AGENTS.md                  # 给 AI 助手 / 后续维护者的导览
+└── README.md
 ```
 
 ---
 
-## 二次迭代路径（"我新增需求时该改哪里"）
+## 从零部署
 
-| 需求 | 改哪里 |
-|---|---|
-| **新增邮件表格列**（比如 "Region"） | `app/foundry_monitor.py`: ① `RetirementRecord` dataclass 加字段 ② `parse_tables()` 加列识别 ③ `render_email_html()` 的 `<th>` / `<td>` 追加 |
-| **改抓取源 URL** | App Setting `SOURCE_URL`（无需改代码） |
-| **改时间窗口 N 天** | App Setting `WINDOW_DAYS` |
-| **改触发时间** | App Setting `SCHEDULE_CRON` + `WEBSITE_TIME_ZONE`，6 字段 NCRONTAB |
-| **加 / 改收件人** | **不动代码**：去 Power Automate Flow → Send an email (V2) → To 字段，分号分隔 |
-| **改发件人** | Power Automate Flow → Send email step → 用其他 M365 账号重新建 connection；或换成 Outlook.com / Gmail connector |
-| **加抄送 / 密送** | Power Automate Flow → Send email (V2) 的高级选项里有 CC/BCC |
-| **加 Teams / Slack / 钉钉 通知** | Power Automate Flow 里在 "Send email" 后并联一步 Teams Post message / Webhook，**函数代码不动**（webhook 接的是 Flow，不是某个具体 connector） |
-| **改邮件样式** | `app/foundry_monitor.py` → `render_email_html()`；Outlook desktop 要点见 [AGENTS.md](AGENTS.md) |
-| **新增公开页面 / API** | `app/function_app.py` 末尾仿 `@app.route("report")` 加一个新 route |
-| **本地调试不发邮件** | 不设 `MAILER_WEBHOOK_URL`，代码会 log error 但不抛；或本地跑 `local-version/foundry_retirement_monitor.py`（生成 HTML 不发邮件） |
+> 前置：`az`、`kubectl`、Docker Desktop、订阅 Owner。Region 默认 westus2。
+
+### 1) 部署基础设施（Bicep）
+
+```powershell
+cd foundry-retirement-monitor
+az login
+az account set --subscription <YOUR_SUB>
+az group create -n rg-foundry-monitor -l westus2
+az deployment group create -g rg-foundry-monitor -f infra\main.bicep
+```
+
+输出会包含 ACR / AKS / AppGw / PIP FQDN。
+
+### 2) 构建镜像并推到 ACR
+
+```powershell
+$acr = 'acrfoundrymonitor'
+az acr login -n $acr
+docker build -t "$acr.azurecr.io/foundry-monitor:latest" .
+docker push "$acr.azurecr.io/foundry-monitor:latest"
+```
+
+### 3) 取 AKS 凭据 + 安装 cert-manager
+
+```powershell
+az aks get-credentials -g rg-foundry-monitor -n aks-foundry-monitor --overwrite-existing
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.15.3/cert-manager.yaml
+kubectl -n cert-manager rollout status deploy/cert-manager-webhook
+```
+
+### 4) Power Automate Flow（拿 webhook URL）
+
+1. <https://make.powerautomate.com> → **Create → Instant cloud flow** → trigger **"When a HTTP request is received"**。
+2. Request body schema：
+   ```json
+   { "type": "object", "properties": { "subject": {"type":"string"}, "html": {"type":"string"} } }
+   ```
+3. 加 **"Send an email (V2)"** (Office 365 Outlook)：
+   - **To** = `you@example.com; teammate@example.com`（分号分隔）
+   - **Subject** = 表达式 `triggerBody()?['subject']`
+   - **Body** = 切到 `</>` code view，填 `triggerBody()?['html']`
+4. Save，复制 trigger 的 **HTTP POST URL**。
+
+### 5) 创建 K8s 资源
+
+```powershell
+# 修改 60-clusterissuer.yaml 里的 email，再 apply
+kubectl apply -f k8s\00-namespace.yaml
+kubectl apply -f k8s\10-pvc.yaml
+kubectl apply -f k8s\60-clusterissuer.yaml
+
+# 把 webhook URL 放进 secret（不要进 git）
+kubectl -n foundry-monitor create secret generic mailer-webhook --from-literal=url='<PASTE_FULL_URL>'
+
+# 把 30-web.yaml / 50-cronjob.yaml 里的 __IMAGE__ 替换成 acr 全名
+$img = "acrfoundrymonitor.azurecr.io/foundry-monitor:latest"
+(Get-Content k8s\30-web.yaml)     -replace '__IMAGE__', $img | kubectl apply -f -
+(Get-Content k8s\50-cronjob.yaml) -replace '__IMAGE__', $img | kubectl apply -f -
+kubectl apply -f k8s\40-ingress.yaml
+```
+
+### 6) 验证
+
+```powershell
+kubectl -n foundry-monitor get pods,svc,ingress,certificate
+# 等 certificate web-tls READY=True（首次 60-180s）
+
+curl.exe -s -o NUL -w "https=%{http_code}`n" https://foundry-monitor.westus2.cloudapp.azure.com/healthz
+# 期望 https=200
+```
+
+### 7) 手动触发一次 baseline 邮件
+
+```powershell
+kubectl -n foundry-monitor create job --from=cronjob/daily-check manual-1
+kubectl -n foundry-monitor logs -l job-name=manual-1 -f
+```
+
+---
+
+## 运行时配置
+
+### Pod 环境变量
+
+| 名称 | 默认 | 说明 |
+|---|---|---|
+| `HISTORY_PATH` | `/data/history.json` | 持久化文件路径（PVC 挂在 `/data`） |
+| `WINDOW_DAYS` | `30` | 关注未来 N 天内退役的型号 |
+| `SOURCE_URL` | learn.microsoft.com 默认 | 抓取源 |
+| `MAILER_WEBHOOK_URL` | — | **CronJob 必需**，来自 secret `mailer-webhook` |
+| `TZ` | `Asia/Shanghai` | 容器时区，邮件 / 日志时间戳显示 CST |
+
+### CronJob 调度
+
+`k8s/50-cronjob.yaml` 的 `schedule: "30 0 * * *"` 是 UTC 时间 = 北京时间 08:30。修改时间直接改这一行后 `kubectl apply`。
+
+### 邮件收件人 / 抄送 / 抄送规则
+
+**全部在 Power Automate Flow 内维护**，不动代码、不动 K8s。
+
+---
+
+## 常用运维
+
+```powershell
+# 看 web pod
+kubectl -n foundry-monitor get pods
+kubectl -n foundry-monitor logs deploy/web --tail=200
+
+# 看最近一次 CronJob
+kubectl -n foundry-monitor get jobs --sort-by=.status.startTime
+kubectl -n foundry-monitor logs -l job-name=<jobname>
+
+# 强制触发邮件
+kubectl -n foundry-monitor create job --from=cronjob/daily-check manual-$(Get-Date -Format yyyyMMddHHmm)
+
+# 看证书 / 续期
+kubectl -n foundry-monitor get certificate,certificaterequest,order,challenge
+kubectl describe certificate web-tls -n foundry-monitor
+
+# 让 AGIC 立即把 Ingress 同步回 AppGw（部署完 Bicep 之后非常有用）
+.\scripts\agic-reconcile.ps1
+
+# 探活
+.\scripts\probe.ps1   # 同时探 https / http
+```
 
 ---
 
 ## 故障排查
 
-- **`KeyBasedAuthenticationNotPermitted`** — 订阅策略禁用共享密钥。本项目已是 FC1 + 全 MI，理论上不会触发；如触发，确认 `allowSharedKeyAccess=false` 且没有用 SAS。
-- **`InternalSubscriptionIsOverQuotaForSku` (Y1)** — 切 region；FC1 不受 Y1 限制。
-- **`MAILER_WEBHOOK_URL` 存进去后值被截断到 `&` 处** — 不要用 `az functionapp config appsettings set`，改用本 README 第 3 步的 `az rest PUT`。
-- **Outlook 桌面版日期列变成 3 行竖着写** — `2025-10-06` 这种带连字符的字符串在 Word renderer 里会换行。`render_email_html()` 已经在 Version / Retirement td 上加了 `nowrap="nowrap"` HTML 属性 + 替换 `-` 为 `&#8209;`（U+2011 non-breaking hyphen），如再发生检查这两处。
-- **本地命令行看不到 blob** — 给自己加 `Storage Blob Data Reader`：
-  ```powershell
-  $me = az ad signed-in-user show --query id -o tsv
-  az role assignment create --assignee $me --role 'Storage Blob Data Reader' `
-    --scope (az storage account show -g rg-foundry-monitor -n stznnzcoperxcfc --query id -o tsv)
-  ```
+- **`https` 502/timeout**：先看 AGIC 是否健康 (`kubectl -n kube-system logs -l app=ingress-appgw --tail=100`)，再看 `kubectl -n foundry-monitor get pods`。
+- **`https` 直接 connection refused**：通常是 NSG 把 80/443 拦了。本仓库 Bicep 已经声明 `nsg-snet-appgw` 并把入站 80/443 加好；但 **Defender for Cloud 有时会自动创建/重挂 NSG**，发生后重跑 `az deployment group create -g rg-foundry-monitor -f infra\main.bicep` 即可把 Bicep 管的 NSG 挂回去。
+- **每次 `az deployment group create` 之后 HTTPS 短暂 502 / 监听器消失**：Bicep 只声明 AppGw 骨架，HTTPS 监听器/SSL 证书是由 AGIC 动态写入的，部署会把它们短暂抹掉。30-60 秒后 AGIC 会自动重建，或手动跑 `.\scripts\agic-reconcile.ps1` 立刻刷新。
+- **证书 `READY=False`**：`kubectl describe certificate web-tls -n foundry-monitor` 看 Order/Challenge 状态。常见原因：Let's Encrypt 限流（同域名 7 天 5 次），或 DNS / FQDN 没指向 PIP。
+- **邮件没发出去 / `MAILER_WEBHOOK_URL` 截断**：必须用 `kubectl create secret --from-literal=url='<完整URL>'`，带引号；不要写进 YAML 提交进 git。
+- **抓取失败但页面在浏览器能打开**：MS Learn 偶尔加 anti-bot，看 `daily-check` job 的日志里的 HTTP 状态码。
 
 ---
 
-## 可选：清理已废弃的 ACS 资源
+## 二次迭代路径
 
-切换到 Power Automate 后，ACS / Email Service / managed domain 已经不再用，可以删：
-
-```powershell
-az communication email domain delete -g rg-foundry-monitor `
-  --email-service-name email-znnzcoperxcfc --name AzureManagedDomain --yes
-az communication email delete -g rg-foundry-monitor -n email-znnzcoperxcfc --yes
-az communication delete       -g rg-foundry-monitor -n acs-znnzcoperxcfc   --yes
-
-# 同时清掉 Function App 里残留的环境变量
-az functionapp config appsettings delete -g rg-foundry-monitor -n func-znnzcoperxcfc `
-  --setting-names ACS_CONNECTION_STRING SENDER_ADDRESS
-```
-
-> 也建议把 `infra/resources.bicep` 里 ACS / Email Service 段落删除，下次 `az deployment sub create` 时会自动清。
+| 需求 | 改哪里 |
+|---|---|
+| 新增邮件表格列 | `app/foundry_monitor.py`：① `RetirementRecord` 加字段 ② `parse_tables()` 加列识别 ③ `render_email_html()` 的 `<th>`/`<td>` 追加 |
+| 改抓取源 / 时间窗口 | Deployment / CronJob 的 `SOURCE_URL` / `WINDOW_DAYS` env |
+| 改触发时间 | `k8s/50-cronjob.yaml` 的 `schedule`（Cron 走 UTC） |
+| 加 / 改收件人 / 发件人 | **不动代码**，直接改 Power Automate Flow |
+| 加 Teams / Slack 通知 | Power Automate Flow 里并联 Teams 步骤；后端不动 |
+| 改邮件样式 | `app/foundry_monitor.py` → `render_email_html()`；Outlook desktop 注意 inline CSS + `nowrap` |
+| 新增公开 API / 页面 | `app/web.py` 加 FastAPI route |
+| 本地调试不发邮件 | 不设 `MAILER_WEBHOOK_URL`，CronJob 代码会 log 后跳过 |
 
 ---
 
 ## 本地版
 
-如果你只想在自己的机器上跑一次 + 在浏览器看 HTML 报告，不想搞 Azure：见 [`local-version/README.md`](local-version/README.md)。
+只想在自己机器上跑一次、浏览器看 HTML，不想搞 Azure：见 [`local-version/README.md`](local-version/README.md)。

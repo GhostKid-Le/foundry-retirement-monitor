@@ -1,423 +1,375 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "metadata": {
     "_generator": {
       "name": "bicep",
       "version": "0.40.2.10011",
-      "templateHash": "10839146856260817310"
+      "templateHash": "3961925704357478309"
     }
   },
   "parameters": {
-    "environmentName": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 64,
-      "metadata": {
-        "description": "azd environment name; used as resource prefix"
-      }
-    },
     "location": {
       "type": "string",
-      "minLength": 1,
+      "defaultValue": "[resourceGroup().location]",
       "metadata": {
-        "description": "Primary location for all resources"
+        "description": "Azure region。"
       }
     },
-    "scheduleCron": {
+    "aksName": {
       "type": "string",
-      "defaultValue": "0 30 8 * * *",
+      "defaultValue": "aks-foundry-monitor",
       "metadata": {
-        "description": "Cron schedule (NCRONTAB, in WEBSITE_TIME_ZONE) — default: 08:30 every day"
+        "description": "AKS 集群名。"
       }
     },
-    "timeZone": {
+    "appGwName": {
       "type": "string",
-      "defaultValue": "China Standard Time",
+      "defaultValue": "agw-foundry-monitor",
       "metadata": {
-        "description": "Time zone for the timer trigger (Windows TZ ID)"
+        "description": "Application Gateway 名。"
+      }
+    },
+    "vnetName": {
+      "type": "string",
+      "defaultValue": "vnet-foundry-monitor",
+      "metadata": {
+        "description": "VNet 名。"
+      }
+    },
+    "logWorkspaceName": {
+      "type": "string",
+      "defaultValue": "log-foundry-monitor",
+      "metadata": {
+        "description": "Log Analytics Workspace 名。"
+      }
+    },
+    "acrName": {
+      "type": "string",
+      "defaultValue": "acrfoundrymonitor",
+      "minLength": 5,
+      "maxLength": 50,
+      "metadata": {
+        "description": "ACR 名（全局唯一，只允许小写字母数字，5-50 字符）。如被占用请改。"
+      }
+    },
+    "nodeVmSize": {
+      "type": "string",
+      "defaultValue": "Standard_D2s_v5",
+      "metadata": {
+        "description": "AKS 系统节点池 VM SKU。Standard_D2s_v5 是最小可用规格。"
+      }
+    },
+    "nodeCount": {
+      "type": "int",
+      "defaultValue": 2,
+      "metadata": {
+        "description": "AKS 节点数。"
+      }
+    },
+    "kubernetesVersion": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Kubernetes 版本（留空使用区域默认）。"
       }
     }
   },
   "variables": {
-    "$fxv#0": {
-      "resourcesResourceGroups": "rg-",
-      "storageStorageAccounts": "st",
-      "webServerFarms": "plan-",
-      "webSitesFunctions": "func-",
-      "insightsComponents": "appi-",
-      "operationalInsightsWorkspaces": "log-",
-      "communicationServices": "acs-",
-      "communicationEmailServices": "email-",
-      "managedIdentityUserAssignedIdentities": "id-"
-    },
-    "abbrs": "[variables('$fxv#0')]",
-    "resourceToken": "[toLower(uniqueString(subscription().id, parameters('environmentName'), parameters('location')))]",
     "tags": {
-      "azd-env-name": "[parameters('environmentName')]",
-      "app": "foundry-retirement-monitor"
-    }
+      "project": "foundry-retirement-monitor",
+      "managedBy": "bicep"
+    },
+    "acrPullRoleId": "7f951dda-4ed3-4680-a7ca-43fe172d538d",
+    "contributorRoleId": "b24988ac-6180-42a0-ab88-20f7382dd24c",
+    "readerRoleId": "acdd72a7-3385-48ef-bd42-f606fba81ae7"
   },
   "resources": [
     {
-      "type": "Microsoft.Resources/resourceGroups",
-      "apiVersion": "2024-03-01",
-      "name": "[format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))]",
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2024-01-01",
+      "name": "[parameters('vnetName')]",
       "location": "[parameters('location')]",
-      "tags": "[variables('tags')]"
+      "tags": "[variables('tags')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.30.0.0/16"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "snet-aks",
+            "properties": {
+              "addressPrefix": "10.30.0.0/22"
+            }
+          },
+          {
+            "name": "snet-appgw",
+            "properties": {
+              "addressPrefix": "10.30.4.0/24"
+            }
+          }
+        ]
+      }
     },
     {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2025-04-01",
-      "name": "resources",
-      "resourceGroup": "[format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2024-01-01",
+      "name": "pip-agw-foundry-monitor",
+      "location": "[parameters('location')]",
+      "tags": "[variables('tags')]",
+      "sku": {
+        "name": "Standard"
+      },
       "properties": {
-        "expressionEvaluationOptions": {
-          "scope": "inner"
+        "publicIPAllocationMethod": "Static",
+        "dnsSettings": {
+          "domainNameLabel": "foundry-monitor"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/applicationGateways",
+      "apiVersion": "2024-01-01",
+      "name": "[parameters('appGwName')]",
+      "location": "[parameters('location')]",
+      "tags": "[variables('tags')]",
+      "properties": {
+        "sku": {
+          "name": "Standard_v2",
+          "tier": "Standard_v2"
         },
-        "mode": "Incremental",
-        "parameters": {
-          "location": {
-            "value": "[parameters('location')]"
-          },
-          "resourceToken": {
-            "value": "[variables('resourceToken')]"
-          },
-          "tags": {
-            "value": "[variables('tags')]"
-          },
-          "scheduleCron": {
-            "value": "[parameters('scheduleCron')]"
-          },
-          "timeZone": {
-            "value": "[parameters('timeZone')]"
+        "autoscaleConfiguration": {
+          "minCapacity": 1,
+          "maxCapacity": 2
+        },
+        "gatewayIPConfigurations": [
+          {
+            "name": "gwip",
+            "properties": {
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), 'snet-appgw')]"
+              }
+            }
           }
+        ],
+        "frontendIPConfigurations": [
+          {
+            "name": "feip-public",
+            "properties": {
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'pip-agw-foundry-monitor')]"
+              }
+            }
+          }
+        ],
+        "frontendPorts": [
+          {
+            "name": "port80",
+            "properties": {
+              "port": 80
+            }
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "pool-default",
+            "properties": {}
+          }
+        ],
+        "backendHttpSettingsCollection": [
+          {
+            "name": "http-default",
+            "properties": {
+              "port": 80,
+              "protocol": "Http",
+              "cookieBasedAffinity": "Disabled",
+              "requestTimeout": 30
+            }
+          }
+        ],
+        "httpListeners": [
+          {
+            "name": "listener-default",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[resourceId('Microsoft.Network/applicationGateways/frontendIPConfigurations', parameters('appGwName'), 'feip-public')]"
+              },
+              "frontendPort": {
+                "id": "[resourceId('Microsoft.Network/applicationGateways/frontendPorts', parameters('appGwName'), 'port80')]"
+              },
+              "protocol": "Http"
+            }
+          }
+        ],
+        "requestRoutingRules": [
+          {
+            "name": "rule-default",
+            "properties": {
+              "ruleType": "Basic",
+              "priority": 100,
+              "httpListener": {
+                "id": "[resourceId('Microsoft.Network/applicationGateways/httpListeners', parameters('appGwName'), 'listener-default')]"
+              },
+              "backendAddressPool": {
+                "id": "[resourceId('Microsoft.Network/applicationGateways/backendAddressPools', parameters('appGwName'), 'pool-default')]"
+              },
+              "backendHttpSettings": {
+                "id": "[resourceId('Microsoft.Network/applicationGateways/backendHttpSettingsCollection', parameters('appGwName'), 'http-default')]"
+              }
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', 'pip-agw-foundry-monitor')]",
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ContainerRegistry/registries",
+      "apiVersion": "2023-11-01-preview",
+      "name": "[parameters('acrName')]",
+      "location": "[parameters('location')]",
+      "tags": "[variables('tags')]",
+      "sku": {
+        "name": "Basic"
+      },
+      "properties": {
+        "adminUserEnabled": false
+      }
+    },
+    {
+      "type": "Microsoft.OperationalInsights/workspaces",
+      "apiVersion": "2023-09-01",
+      "name": "[parameters('logWorkspaceName')]",
+      "location": "[parameters('location')]",
+      "tags": "[variables('tags')]",
+      "properties": {
+        "sku": {
+          "name": "PerGB2018"
         },
-        "template": {
-          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-          "contentVersion": "1.0.0.0",
-          "metadata": {
-            "_generator": {
-              "name": "bicep",
-              "version": "0.40.2.10011",
-              "templateHash": "11016433935638793757"
+        "retentionInDays": 30
+      }
+    },
+    {
+      "type": "Microsoft.ContainerService/managedClusters",
+      "apiVersion": "2024-05-01",
+      "name": "[parameters('aksName')]",
+      "location": "[parameters('location')]",
+      "tags": "[variables('tags')]",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "kubernetesVersion": "[if(empty(parameters('kubernetesVersion')), null(), parameters('kubernetesVersion'))]",
+        "dnsPrefix": "[parameters('aksName')]",
+        "enableRBAC": true,
+        "agentPoolProfiles": [
+          {
+            "name": "sys",
+            "mode": "System",
+            "count": "[parameters('nodeCount')]",
+            "vmSize": "[parameters('nodeVmSize')]",
+            "osType": "Linux",
+            "osDiskSizeGB": 64,
+            "vnetSubnetID": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), 'snet-aks')]",
+            "type": "VirtualMachineScaleSets"
+          }
+        ],
+        "networkProfile": {
+          "networkPlugin": "azure",
+          "networkPolicy": "azure",
+          "serviceCidr": "10.40.0.0/16",
+          "dnsServiceIP": "10.40.0.10",
+          "loadBalancerSku": "standard"
+        },
+        "addonProfiles": {
+          "ingressApplicationGateway": {
+            "enabled": true,
+            "config": {
+              "applicationGatewayId": "[resourceId('Microsoft.Network/applicationGateways', parameters('appGwName'))]"
             }
           },
-          "parameters": {
-            "location": {
-              "type": "string"
-            },
-            "resourceToken": {
-              "type": "string"
-            },
-            "tags": {
-              "type": "object"
-            },
-            "scheduleCron": {
-              "type": "string"
-            },
-            "timeZone": {
-              "type": "string"
-            }
-          },
-          "variables": {
-            "$fxv#0": {
-              "resourcesResourceGroups": "rg-",
-              "storageStorageAccounts": "st",
-              "webServerFarms": "plan-",
-              "webSitesFunctions": "func-",
-              "insightsComponents": "appi-",
-              "operationalInsightsWorkspaces": "log-",
-              "communicationServices": "acs-",
-              "communicationEmailServices": "email-",
-              "managedIdentityUserAssignedIdentities": "id-"
-            },
-            "abbrs": "[variables('$fxv#0')]",
-            "blobOwnerRoleId": "b7e6dc6d-f1e8-4753-8033-0f276bb0955b",
-            "queueContribRoleId": "974c5e8b-45b9-4653-ba55-5f855dd0fb88",
-            "tableContribRoleId": "0a9a7e1f-b9d0-4cc4-a60d-0319b160aaa3"
-          },
-          "resources": [
-            {
-              "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
-              "apiVersion": "2023-01-31",
-              "name": "[format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken'))]",
-              "location": "[parameters('location')]",
-              "tags": "[parameters('tags')]"
-            },
-            {
-              "type": "Microsoft.Storage/storageAccounts",
-              "apiVersion": "2024-01-01",
-              "name": "[format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken'))]",
-              "location": "[parameters('location')]",
-              "tags": "[parameters('tags')]",
-              "sku": {
-                "name": "Standard_LRS"
-              },
-              "kind": "StorageV2",
-              "properties": {
-                "allowBlobPublicAccess": false,
-                "minimumTlsVersion": "TLS1_2",
-                "allowSharedKeyAccess": true,
-                "publicNetworkAccess": "Enabled"
-              }
-            },
-            {
-              "type": "Microsoft.Storage/storageAccounts/blobServices",
-              "apiVersion": "2024-01-01",
-              "name": "[format('{0}/{1}', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')), 'default')]",
-              "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-              "apiVersion": "2024-01-01",
-              "name": "[format('{0}/{1}/{2}', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')), 'default', 'history')]",
-              "properties": {
-                "publicAccess": "None"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')), 'default')]"
-              ]
-            },
-            {
-              "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-              "apiVersion": "2024-01-01",
-              "name": "[format('{0}/{1}/{2}', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')), 'default', 'deploymentpackage')]",
-              "properties": {
-                "publicAccess": "None"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')), 'default')]"
-              ]
-            },
-            {
-              "type": "Microsoft.OperationalInsights/workspaces",
-              "apiVersion": "2023-09-01",
-              "name": "[format('{0}{1}', variables('abbrs').operationalInsightsWorkspaces, parameters('resourceToken'))]",
-              "location": "[parameters('location')]",
-              "tags": "[parameters('tags')]",
-              "properties": {
-                "sku": {
-                  "name": "PerGB2018"
-                },
-                "retentionInDays": 30
-              }
-            },
-            {
-              "type": "Microsoft.Insights/components",
-              "apiVersion": "2020-02-02",
-              "name": "[format('{0}{1}', variables('abbrs').insightsComponents, parameters('resourceToken'))]",
-              "location": "[parameters('location')]",
-              "tags": "[parameters('tags')]",
-              "kind": "web",
-              "properties": {
-                "Application_Type": "web",
-                "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', format('{0}{1}', variables('abbrs').operationalInsightsWorkspaces, parameters('resourceToken')))]"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.OperationalInsights/workspaces', format('{0}{1}', variables('abbrs').operationalInsightsWorkspaces, parameters('resourceToken')))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Web/serverfarms",
-              "apiVersion": "2024-04-01",
-              "name": "[format('{0}{1}', variables('abbrs').webServerFarms, parameters('resourceToken'))]",
-              "location": "[parameters('location')]",
-              "tags": "[parameters('tags')]",
-              "sku": {
-                "name": "FC1",
-                "tier": "FlexConsumption"
-              },
-              "kind": "functionapp,linux",
-              "properties": {
-                "reserved": true
-              }
-            },
-            {
-              "type": "Microsoft.Web/sites",
-              "apiVersion": "2024-04-01",
-              "name": "[format('{0}{1}', variables('abbrs').webSitesFunctions, parameters('resourceToken'))]",
-              "location": "[parameters('location')]",
-              "kind": "functionapp,linux",
-              "tags": "[union(parameters('tags'), createObject('azd-service-name', 'func'))]",
-              "identity": {
-                "type": "UserAssigned",
-                "userAssignedIdentities": {
-                  "[format('{0}', resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken'))))]": {}
-                }
-              },
-              "properties": {
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', format('{0}{1}', variables('abbrs').webServerFarms, parameters('resourceToken')))]",
-                "httpsOnly": true,
-                "functionAppConfig": {
-                  "deployment": {
-                    "storage": {
-                      "type": "blobContainer",
-                      "value": "[format('{0}{1}', reference(resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken'))), '2024-01-01').primaryEndpoints.blob, 'deploymentpackage')]",
-                      "authentication": {
-                        "type": "UserAssignedIdentity",
-                        "userAssignedIdentityResourceId": "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken')))]"
-                      }
-                    }
-                  },
-                  "runtime": {
-                    "name": "python",
-                    "version": "3.11"
-                  },
-                  "scaleAndConcurrency": {
-                    "instanceMemoryMB": 2048,
-                    "maximumInstanceCount": 40
-                  }
-                },
-                "siteConfig": {
-                  "ftpsState": "Disabled",
-                  "minTlsVersion": "1.2",
-                  "appSettings": [
-                    {
-                      "name": "AzureWebJobsStorage__accountName",
-                      "value": "[format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken'))]"
-                    },
-                    {
-                      "name": "AzureWebJobsStorage__credential",
-                      "value": "managedidentity"
-                    },
-                    {
-                      "name": "AzureWebJobsStorage__clientId",
-                      "value": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken'))), '2023-01-31').clientId]"
-                    },
-                    {
-                      "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                      "value": "[reference(resourceId('Microsoft.Insights/components', format('{0}{1}', variables('abbrs').insightsComponents, parameters('resourceToken'))), '2020-02-02').ConnectionString]"
-                    },
-                    {
-                      "name": "WEBSITE_TIME_ZONE",
-                      "value": "[parameters('timeZone')]"
-                    },
-                    {
-                      "name": "SCHEDULE_CRON",
-                      "value": "[parameters('scheduleCron')]"
-                    },
-                    {
-                      "name": "AZURE_CLIENT_ID",
-                      "value": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken'))), '2023-01-31').clientId]"
-                    },
-                    {
-                      "name": "STORAGE_ACCOUNT_NAME",
-                      "value": "[format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken'))]"
-                    },
-                    {
-                      "name": "HISTORY_CONTAINER",
-                      "value": "history"
-                    },
-                    {
-                      "name": "HISTORY_BLOB",
-                      "value": "foundry_retirement_history.json"
-                    },
-                    {
-                      "name": "SOURCE_URL",
-                      "value": "https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/model-retirement-schedule"
-                    },
-                    {
-                      "name": "WINDOW_DAYS",
-                      "value": "30"
-                    }
-                  ]
-                }
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Insights/components', format('{0}{1}', variables('abbrs').insightsComponents, parameters('resourceToken')))]",
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')), 'default', 'deploymentpackage')]",
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')), 'default', 'history')]",
-                "[resourceId('Microsoft.Web/serverfarms', format('{0}{1}', variables('abbrs').webServerFarms, parameters('resourceToken')))]",
-                "[resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')))]",
-                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken')))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Authorization/roleAssignments",
-              "apiVersion": "2022-04-01",
-              "scope": "[resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')))]",
-              "name": "[guid(resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken'))), resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken'))), variables('blobOwnerRoleId'))]",
-              "properties": {
-                "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', variables('blobOwnerRoleId'))]",
-                "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken'))), '2023-01-31').principalId]",
-                "principalType": "ServicePrincipal"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')))]",
-                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken')))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Authorization/roleAssignments",
-              "apiVersion": "2022-04-01",
-              "scope": "[resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')))]",
-              "name": "[guid(resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken'))), resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken'))), variables('queueContribRoleId'))]",
-              "properties": {
-                "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', variables('queueContribRoleId'))]",
-                "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken'))), '2023-01-31').principalId]",
-                "principalType": "ServicePrincipal"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')))]",
-                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken')))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Authorization/roleAssignments",
-              "apiVersion": "2022-04-01",
-              "scope": "[resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')))]",
-              "name": "[guid(resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken'))), resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken'))), variables('tableContribRoleId'))]",
-              "properties": {
-                "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', variables('tableContribRoleId'))]",
-                "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken'))), '2023-01-31').principalId]",
-                "principalType": "ServicePrincipal"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken')))]",
-                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken')))]"
-              ]
-            }
-          ],
-          "outputs": {
-            "functionAppName": {
-              "type": "string",
-              "value": "[format('{0}{1}', variables('abbrs').webSitesFunctions, parameters('resourceToken'))]"
-            },
-            "storageAccountName": {
-              "type": "string",
-              "value": "[format('{0}{1}', variables('abbrs').storageStorageAccounts, parameters('resourceToken'))]"
-            },
-            "userAssignedIdentityClientId": {
-              "type": "string",
-              "value": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}{1}', variables('abbrs').managedIdentityUserAssignedIdentities, parameters('resourceToken'))), '2023-01-31').clientId]"
+          "omsagent": {
+            "enabled": true,
+            "config": {
+              "logAnalyticsWorkspaceResourceID": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logWorkspaceName'))]"
             }
           }
         }
       },
       "dependsOn": [
-        "[subscriptionResourceId('Microsoft.Resources/resourceGroups', format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName')))]"
+        "[resourceId('Microsoft.Network/applicationGateways', parameters('appGwName'))]",
+        "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logWorkspaceName'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2022-04-01",
+      "scope": "[resourceId('Microsoft.ContainerRegistry/registries', parameters('acrName'))]",
+      "name": "[guid(resourceId('Microsoft.ContainerRegistry/registries', parameters('acrName')), resourceId('Microsoft.ContainerService/managedClusters', parameters('aksName')), variables('acrPullRoleId'))]",
+      "properties": {
+        "principalId": "[reference(resourceId('Microsoft.ContainerService/managedClusters', parameters('aksName')), '2024-05-01').identityProfile.kubeletidentity.objectId]",
+        "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', variables('acrPullRoleId'))]",
+        "principalType": "ServicePrincipal"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.ContainerRegistry/registries', parameters('acrName'))]",
+        "[resourceId('Microsoft.ContainerService/managedClusters', parameters('aksName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2022-04-01",
+      "scope": "[resourceId('Microsoft.Network/applicationGateways', parameters('appGwName'))]",
+      "name": "[guid(resourceId('Microsoft.Network/applicationGateways', parameters('appGwName')), resourceId('Microsoft.ContainerService/managedClusters', parameters('aksName')), 'agic-contrib')]",
+      "properties": {
+        "principalId": "[reference(resourceId('Microsoft.ContainerService/managedClusters', parameters('aksName')), '2024-05-01').addonProfiles.ingressApplicationGateway.identity.objectId]",
+        "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', variables('contributorRoleId'))]",
+        "principalType": "ServicePrincipal"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.ContainerService/managedClusters', parameters('aksName'))]",
+        "[resourceId('Microsoft.Network/applicationGateways', parameters('appGwName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2022-04-01",
+      "name": "[guid(resourceGroup().id, resourceId('Microsoft.ContainerService/managedClusters', parameters('aksName')), 'agic-reader')]",
+      "properties": {
+        "principalId": "[reference(resourceId('Microsoft.ContainerService/managedClusters', parameters('aksName')), '2024-05-01').addonProfiles.ingressApplicationGateway.identity.objectId]",
+        "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', variables('readerRoleId'))]",
+        "principalType": "ServicePrincipal"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.ContainerService/managedClusters', parameters('aksName'))]"
       ]
     }
   ],
   "outputs": {
-    "AZURE_LOCATION": {
+    "acrLoginServer": {
       "type": "string",
-      "value": "[parameters('location')]"
+      "value": "[reference(resourceId('Microsoft.ContainerRegistry/registries', parameters('acrName')), '2023-11-01-preview').loginServer]"
     },
-    "AZURE_RESOURCE_GROUP": {
+    "aksClusterName": {
       "type": "string",
-      "value": "[format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))]"
+      "value": "[parameters('aksName')]"
     },
-    "AZURE_FUNCTION_NAME": {
+    "appGwPublicIp": {
       "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))), 'Microsoft.Resources/deployments', 'resources'), '2025-04-01').outputs.functionAppName.value]"
+      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', 'pip-agw-foundry-monitor'), '2024-01-01').ipAddress]"
     },
-    "AZURE_STORAGE_ACCOUNT": {
+    "appGwFqdn": {
       "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))), 'Microsoft.Resources/deployments', 'resources'), '2025-04-01').outputs.storageAccountName.value]"
+      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', 'pip-agw-foundry-monitor'), '2024-01-01').dnsSettings.fqdn]"
+    },
+    "resourceGroupName": {
+      "type": "string",
+      "value": "[resourceGroup().name]"
     }
   }
 }

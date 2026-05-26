@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: foundry-monitor
+  labels: { app: foundry-monitor, component: web }
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: foundry-monitor, component: web }
+  template:
+    metadata:
+      labels: { app: foundry-monitor, component: web }
+    spec:
+      containers:
+        - name: web
+          image: __IMAGE__
+          ports:
+            - containerPort: 8000
+          env:
+            - name: HISTORY_PATH
+              value: /data/history.json
+            - name: WINDOW_DAYS
+              value: "30"
+          readinessProbe:
+            httpGet: { path: /healthz, port: 8000 }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /healthz, port: 8000 }
+            initialDelaySeconds: 15
+            periodSeconds: 30
+          resources:
+            requests: { cpu: 50m, memory: 128Mi }
+            limits:   { cpu: 500m, memory: 512Mi }
+          volumeMounts:
+            - { name: state, mountPath: /data }
+      volumes:
+        - name: state
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+  namespace: foundry-monitor
+spec:
+  type: ClusterIP
+  selector: { app: foundry-monitor, component: web }
+  ports:
+    - port: 80
+      targetPort: 8000

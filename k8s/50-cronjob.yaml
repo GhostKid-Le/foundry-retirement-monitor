@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: daily-check
+  namespace: foundry-monitor
+spec:
+  # UTC 00:30 = 北京时间 08:30
+  schedule: "30 0 * * *"
+  timeZone: "Etc/UTC"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: daily-check
+              image: __IMAGE__
+              command: ["python", "daily_job.py"]
+              env:
+                - name: HISTORY_PATH
+                  value: /data/history.json
+                - name: WINDOW_DAYS
+                  value: "30"
+                - name: MAILER_WEBHOOK_URL
+                  valueFrom:
+                    secretKeyRef: { name: mailer-webhook, key: url }
+              resources:
+                requests: { cpu: 50m, memory: 128Mi }
+                limits:   { cpu: 500m, memory: 512Mi }
+              volumeMounts:
+                - { name: state, mountPath: /data }
+          volumes:
+            - name: state
+              persistentVolumeClaim:
+                claimName: state
