@@ -51,7 +51,7 @@ def main() -> int:
         source_url=SOURCE_URL,
         change_summary_html=(
             f"<p style='color:#94a3b8;font-size:13px;margin:8px 0 0;'>"
-            f"{fetch_note} · 每 15 分钟自动刷新 · "
+            f"{fetch_note} · 每小时整点自动刷新 · "
             f"每日 08:30 CST 由 GitHub Actions 发邮件"
             f"</p>"
         ),
