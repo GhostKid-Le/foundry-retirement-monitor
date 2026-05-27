@@ -1,0 +1,93 @@
+{
+  "date": "2026-05-27",
+  "records": [
+    {
+      "model": "sora-2",
+      "version": "2025-10-06",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-06-23",
+      "replacement": "sora-2 (2025-12-08)",
+      "raw_retirement_date": "2026-06-23",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "Llama-3.2-11B-Vision-Instruct",
+      "version": "—",
+      "lifecycle": "Deprecated",
+      "retirement_date": "2026-06-13",
+      "replacement": "—",
+      "raw_retirement_date": "2026-06-13",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "Llama-3.2-90B-Vision-Instruct",
+      "version": "—",
+      "lifecycle": "Deprecated",
+      "retirement_date": "2026-06-13",
+      "replacement": "—",
+      "raw_retirement_date": "2026-06-13",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "Meta-Llama-3.1-405B-Instruct",
+      "version": "—",
+      "lifecycle": "Deprecated",
+      "retirement_date": "2026-06-13",
+      "replacement": "—",
+      "raw_retirement_date": "2026-06-13",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "Meta-Llama-3.1-8B",
+      "version": "—",
+      "lifecycle": "Deprecated",
+      "retirement_date": "2026-06-13",
+      "replacement": "—",
+      "raw_retirement_date": "2026-06-13",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "Meta-Llama-3.1-8B-Instruct",
+      "version": "—",
+      "lifecycle": "Deprecated",
+      "retirement_date": "2026-06-13",
+      "replacement": "—",
+      "raw_retirement_date": "2026-06-13",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "gpt-4o-mini-tts",
+      "version": "2025-03-20",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-06-01",
+      "replacement": "—",
+      "raw_retirement_date": "2026-06-01",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "mistral-document-ai-2505",
+      "version": "1",
+      "lifecycle": "GA",
+      "retirement_date": "2026-05-31",
+      "replacement": "mistral-document-ai-2512",
+      "raw_retirement_date": "2026-05-31",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    }
+  ]
+}
