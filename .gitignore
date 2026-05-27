@@ -40,3 +40,6 @@ headers.txt
 .vscode/
 .DS_Store
 Thumbs.db
+
+# ---- GitHub Pages build output ----
+site/

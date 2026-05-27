@@ -1,6 +1,6 @@
-"""文件型历史快照存储（挂载在 PVC 上）。
+"""文件型历史快照存储。
 
-- 路径来自 env `HISTORY_PATH`，默认 `/data/history.json`。
+- 路径来自 env `HISTORY_PATH`，默认 `data/history.json`（相对仓库根）。
 - 单文件 JSON：`{"date": "YYYY-MM-DD", "records": [...]}`。
 """
 from __future__ import annotations
@@ -15,7 +15,7 @@ import foundry_monitor as fm
 
 
 def _path() -> Path:
-    return Path(os.environ.get("HISTORY_PATH", "/data/history.json"))
+    return Path(os.environ.get("HISTORY_PATH", "data/history.json"))
 
 
 def load_yesterday() -> list[dict]:
