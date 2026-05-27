@@ -1,4 +1,4 @@
-name: Daily Foundry Retirement Monitor
+name: Daily Email (08:30 CST)
 
 on:
   schedule:
@@ -8,19 +8,10 @@ on:
 
 permissions:
   contents: write   # 提交快照回 main
-  pages: write      # 部署到 GitHub Pages
-  id-token: write   # GitHub Pages 部署需要
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
 
 jobs:
-  run:
+  email:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -50,16 +41,6 @@ jobs:
           mkdir -p ../data
           python daily_job.py
 
-      - name: Build static site
-        env:
-          HISTORY_PATH: ../data/history.json
-          SITE_OUT: site
-          TZ: Asia/Shanghai
-        working-directory: app
-        run: |
-          mkdir -p ../site
-          SITE_OUT=../site python build_site.py
-
       - name: Commit snapshot
         run: |
           git config user.name "github-actions[bot]"
@@ -71,12 +52,3 @@ jobs:
             git commit -m "chore(data): daily snapshot $(date -u +%Y-%m-%d)"
             git push
           fi
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: site
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4

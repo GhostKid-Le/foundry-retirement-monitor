@@ -1,18 +1,16 @@
-"""生成 GitHub Pages 静态站点。
+"""生成 GitHub Pages 静态站点（实时抓取版）。
 
-读取 `data/history.json` 中保存的最新快照，调用现有的 `render_email_html`
-把内容渲染为 `site/index.html`。GitHub Actions 在 daily_job 跑完后执行本脚本，
-随后把 `site/` 目录发布到 GitHub Pages。
+每次运行都重新抓取 MS Learn 退役时间表，渲染当前最新报告到 `site/index.html`。
+不读 / 不写 history 快照（diff 用 daily_job 跑）。
 """
 from __future__ import annotations
 
 import logging
 import os
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 import foundry_monitor as fm
-import storage
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
@@ -24,32 +22,27 @@ WINDOW_DAYS = int(os.environ.get("WINDOW_DAYS", "30"))
 OUT_DIR = Path(os.environ.get("SITE_OUT", "site"))
 
 
+def _now_cst_str() -> str:
+    cst = timezone(timedelta(hours=8))
+    return datetime.now(cst).strftime("%Y-%m-%d %H:%M:%S CST")
+
+
 def main() -> int:
-    snapshot_path = Path(os.environ.get("HISTORY_PATH", "data/history.json"))
     today = date.today()
     target = today + timedelta(days=WINDOW_DAYS)
 
-    stored = storage.load_yesterday()
-    snapshot_date_str = today.isoformat()
-    if snapshot_path.exists():
-        import json
-        try:
-            snapshot_date_str = json.loads(
-                snapshot_path.read_text(encoding="utf-8")
-            ).get("date", snapshot_date_str)
-        except Exception:  # noqa: BLE001
-            pass
-
-    if not stored:
-        logging.warning("快照为空，渲染空白页")
-        records: list[fm.RetirementRecord] = []
-    else:
-        records = [
-            fm.RetirementRecord(**{k: v for k, v in r.items()
-                                   if k in fm.RetirementRecord.__dataclass_fields__})
-            for r in stored
-        ]
+    try:
+        html_raw = fm.fetch_html(SOURCE_URL)
+        all_records = fm.parse_tables(html_raw)
+        records = fm.filter_window(all_records, today, target)
+        fm.detect_conflicts(records)
         records = fm.sort_records(records)
+        fetch_note = f"实时抓取于 {_now_cst_str()}"
+        logging.info("fetched %d records (window)", len(records))
+    except Exception as e:  # noqa: BLE001
+        logging.exception("fetch failed")
+        records = []
+        fetch_note = f"⚠️ 抓取失败 ({_now_cst_str()}): {e}"
 
     html = fm.render_email_html(
         records=records,
@@ -58,18 +51,16 @@ def main() -> int:
         source_url=SOURCE_URL,
         change_summary_html=(
             f"<p style='color:#94a3b8;font-size:13px;margin:8px 0 0;'>"
-            f"快照日期：{snapshot_date_str} · 由 GitHub Actions 每日 08:30 (CST) 自动更新"
+            f"{fetch_note} · 每 15 分钟自动刷新 · "
+            f"每日 08:30 CST 由 GitHub Actions 发邮件"
             f"</p>"
         ),
     )
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    out_file = OUT_DIR / "index.html"
-    out_file.write_text(html, encoding="utf-8")
-    logging.info("已写入 %s (%d 条记录)", out_file, len(records))
-
-    # GitHub Pages: prevent Jekyll processing
+    (OUT_DIR / "index.html").write_text(html, encoding="utf-8")
     (OUT_DIR / ".nojekyll").write_text("", encoding="utf-8")
+    logging.info("wrote %s/index.html", OUT_DIR)
     return 0
 
 

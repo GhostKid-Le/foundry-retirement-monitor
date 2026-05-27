@@ -1,0 +1,62 @@
+name: Refresh Site (every 15 min)
+
+on:
+  schedule:
+    # 每 15 分钟刷新一次（GitHub cron 实际可能有数分钟延迟）
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+      - '.github/workflows/refresh.yml'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 多个 cron 触发可能堆积，pages 部署只允许 1 个活跃
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: app/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r app/requirements.txt
+
+      - name: Build static site (fetch live)
+        env:
+          SITE_OUT: ../site
+          TZ: Asia/Shanghai
+        working-directory: app
+        run: |
+          mkdir -p ../site
+          python build_site.py
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
