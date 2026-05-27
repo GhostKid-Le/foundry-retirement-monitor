@@ -1,4 +1,4 @@
-name: Refresh Site (every 15 min)
+name: Refresh Site (hourly)
 
 on:
   schedule:
