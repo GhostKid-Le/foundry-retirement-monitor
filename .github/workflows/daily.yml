@@ -43,7 +43,7 @@ jobs:
       - name: Run daily monitor (fetch + diff + email)
         env:
           MAILER_WEBHOOK_URL: ${{ secrets.MAILER_WEBHOOK_URL }}
-          HISTORY_PATH: data/history.json
+          HISTORY_PATH: ../data/history.json
           TZ: Asia/Shanghai
         working-directory: app
         run: |
@@ -52,19 +52,19 @@ jobs:
 
       - name: Build static site
         env:
-          HISTORY_PATH: data/history.json
+          HISTORY_PATH: ../data/history.json
           SITE_OUT: site
           TZ: Asia/Shanghai
         working-directory: app
         run: |
           mkdir -p ../site
-          HISTORY_PATH=../data/history.json SITE_OUT=../site python build_site.py
+          SITE_OUT=../site python build_site.py
 
       - name: Commit snapshot
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/history.json
+          git add -A data
           if git diff --cached --quiet; then
             echo "No snapshot changes to commit."
           else
