@@ -1,9 +1,11 @@
-name: Daily Email (08:30 CST)
+name: Daily Email (target ~07:17 CST, may drift later)
 
 on:
   schedule:
-    # 每天 00:30 UTC = 08:30 Asia/Shanghai
-    - cron: '30 0 * * *'
+    # 23:17 UTC = 07:17 Asia/Shanghai
+    # 故意挑非整点/半点冷门分钟，规避 GitHub Actions 高峰排队
+    # 仍可能被延迟 1-N 小时（免费 cron 无 SLA），目标是大概率在北京时间上午到达
+    - cron: '17 23 * * *'
   workflow_dispatch:
 
 permissions:

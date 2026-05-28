@@ -20,7 +20,7 @@
 │       2) actions/deploy-pages       → 部署到 GitHub Pages            │
 │                                                                      │
 │  .github/workflows/daily.yml      （每日邮件）                        │
-│    └─ schedule: 30 0 * * *  (UTC = 08:30 Asia/Shanghai)              │
+│    └─ schedule: 17 23 * * *  (UTC = 07:17 CST 目标，可能被延迟)         │
 │       1) python app/daily_job.py   → 抓取 + diff + POST webhook      │
 │       2) git commit data/history.json  (快照入库)                    │
 │                                                                      │
@@ -39,7 +39,7 @@
 
 **两个 workflow 各司其职**：
 - `refresh.yml` —— 每小时整点把最新内容刷到 GitHub Pages（**不发邮件**）
-- `daily.yml` —— 每天 08:30 CST 抓取 + diff + 发邮件 + commit 快照（**不部署 Pages**）
+- `daily.yml` —— 每日一贴原计划 **07:17 CST** 启动（取决于 GitHub 调度队列可能延迟 1–6小时到达），抓取 + diff + 发邮件 + commit 快照（**不部署 Pages**）
 
 **特点**：
 - ✅ 0 云成本（GitHub Actions 公共 repo 免费）
@@ -56,7 +56,7 @@
 foundry-retirement-monitor/
 ├── .github/workflows/
 │   ├── refresh.yml               # 每小时整点刷新 GitHub Pages
-│   └── daily.yml                 # 每天 08:30 CST 抓取+diff+发邮件+commit 快照
+│   └── daily.yml                 # 每日目标 07:17 CST 抓取+diff+发邮件+commit 快照
 ├── app/
 │   ├── foundry_monitor.py        # 抓取 / 解析 / diff / 渲染 HTML
 │   ├── storage.py                # JSON 历史（默认 data/history.json）
@@ -126,7 +126,7 @@ cd foundry-retirement-monitor
 
 ### 改触发时间
 - **页面刷新频率**：`refresh.yml` 的 `cron: '0 * * * *'`（每小时整点 UTC = 每小时整点 CST）。改成每 30 分钟：`'*/30 * * * *'`。
-- **邮件发送时间**：`daily.yml` 的 `cron: '30 0 * * *'`（UTC，= 北京时间 08:30）。改成北京时间 09:00 → `'0 1 * * *'`。
+- **邮件发送时间**：`daily.yml` 的 `cron: '17 23 * * *'`（UTC 23:17 = 北京时间 07:17）。免费 GitHub Actions cron 无 SLA，整点/半点延迟严重；已挑选冷门分钟 + 提前 1 小多时作为缓冲。调成北京时间 09:00 → `'0 1 * * *'`（但延迟后实际可能在 09:00–12:00）。
 
 ### 改收件人 / 抄送 / 抄送规则
 **全部在 Power Automate Flow 内维护**，不动代码、不动 workflow。
