@@ -1,5 +1,5 @@
 {
-  "date": "2026-05-27",
+  "date": "2026-05-28",
   "records": [
     {
       "model": "sora-2",
@@ -10,7 +10,7 @@
       "raw_retirement_date": "2026-06-23",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "Llama-3.2-11B-Vision-Instruct",
@@ -21,7 +21,7 @@
       "raw_retirement_date": "2026-06-13",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "Llama-3.2-90B-Vision-Instruct",
@@ -32,7 +32,7 @@
       "raw_retirement_date": "2026-06-13",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "Meta-Llama-3.1-405B-Instruct",
@@ -43,7 +43,7 @@
       "raw_retirement_date": "2026-06-13",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "Meta-Llama-3.1-8B",
@@ -54,7 +54,7 @@
       "raw_retirement_date": "2026-06-13",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "Meta-Llama-3.1-8B-Instruct",
@@ -65,7 +65,7 @@
       "raw_retirement_date": "2026-06-13",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "gpt-4o-mini-tts",
@@ -76,7 +76,7 @@
       "raw_retirement_date": "2026-06-01",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "mistral-document-ai-2505",
@@ -87,7 +87,7 @@
       "raw_retirement_date": "2026-05-31",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     }
   ]
 }
