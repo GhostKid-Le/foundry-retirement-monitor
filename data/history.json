@@ -1,6 +1,116 @@
 {
-  "date": "2026-05-31",
+  "date": "2026-06-01",
   "records": [
+    {
+      "model": "FW-DeepSeek-V3.1",
+      "version": "1",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-07-01",
+      "replacement": "—",
+      "raw_retirement_date": "2026-07-01",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "FW-DeepSeek-V3.2",
+      "version": "1",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-07-01",
+      "replacement": "—",
+      "raw_retirement_date": "2026-07-01",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "FW-GLM-4.7",
+      "version": "1",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-07-01",
+      "replacement": "—",
+      "raw_retirement_date": "2026-07-01",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "FW-GLM-5",
+      "version": "1",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-07-01",
+      "replacement": "—",
+      "raw_retirement_date": "2026-07-01",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "FW-GPT-OSS-120B",
+      "version": "1",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-07-01",
+      "replacement": "—",
+      "raw_retirement_date": "2026-07-01",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "FW-Kimi-K2-Instruct-0905",
+      "version": "1",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-07-01",
+      "replacement": "—",
+      "raw_retirement_date": "2026-07-01",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "FW-Kimi-K2-Thinking",
+      "version": "1",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-07-01",
+      "replacement": "—",
+      "raw_retirement_date": "2026-07-01",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "FW-Kimi-K2.5",
+      "version": "1",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-07-01",
+      "replacement": "—",
+      "raw_retirement_date": "2026-07-01",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "FW-MiniMax-M2.5",
+      "version": "1",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-07-01",
+      "replacement": "—",
+      "raw_retirement_date": "2026-07-01",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "FW-Qwen3-14B",
+      "version": "1",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-07-01",
+      "replacement": "—",
+      "raw_retirement_date": "2026-07-01",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "gpt-5-chat",
       "version": "2025-08-07",
@@ -140,17 +250,6 @@
       "retirement_date": "2026-06-01",
       "replacement": "—",
       "raw_retirement_date": "2026-06-01",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "mistral-document-ai-2505",
-      "version": "1",
-      "lifecycle": "GA",
-      "retirement_date": "2026-05-31",
-      "replacement": "mistral-document-ai-2512",
-      "raw_retirement_date": "2026-05-31",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
