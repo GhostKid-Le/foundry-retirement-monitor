@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-01",
+  "date": "2026-06-02",
   "records": [
     {
       "model": "FW-DeepSeek-V3.1",
@@ -10,7 +10,7 @@
       "raw_retirement_date": "2026-07-01",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "FW-DeepSeek-V3.2",
@@ -21,7 +21,7 @@
       "raw_retirement_date": "2026-07-01",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "FW-GLM-4.7",
@@ -32,7 +32,7 @@
       "raw_retirement_date": "2026-07-01",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "FW-GLM-5",
@@ -43,7 +43,7 @@
       "raw_retirement_date": "2026-07-01",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "FW-GPT-OSS-120B",
@@ -54,7 +54,7 @@
       "raw_retirement_date": "2026-07-01",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "FW-Kimi-K2-Instruct-0905",
@@ -65,7 +65,7 @@
       "raw_retirement_date": "2026-07-01",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "FW-Kimi-K2-Thinking",
@@ -76,7 +76,7 @@
       "raw_retirement_date": "2026-07-01",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "FW-Kimi-K2.5",
@@ -87,7 +87,7 @@
       "raw_retirement_date": "2026-07-01",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "FW-MiniMax-M2.5",
@@ -98,7 +98,7 @@
       "raw_retirement_date": "2026-07-01",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "FW-Qwen3-14B",
@@ -109,7 +109,7 @@
       "raw_retirement_date": "2026-07-01",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "gpt-5-chat",
@@ -239,17 +239,6 @@
       "retirement_date": "2026-06-13",
       "replacement": "—",
       "raw_retirement_date": "2026-06-13",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "gpt-4o-mini-tts",
-      "version": "2025-03-20",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-06-01",
-      "replacement": "—",
-      "raw_retirement_date": "2026-06-01",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
