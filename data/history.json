@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-02",
+  "date": "2026-06-03",
   "records": [
     {
       "model": "FW-DeepSeek-V3.1",
@@ -173,17 +173,6 @@
       "retirement_date": "2026-06-29",
       "replacement": "gpt-chat-latest",
       "raw_retirement_date": "2026-06-29",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "sora-2",
-      "version": "2025-10-06",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-06-23",
-      "replacement": "sora-2 (2025-12-08)",
-      "raw_retirement_date": "2026-06-23",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
