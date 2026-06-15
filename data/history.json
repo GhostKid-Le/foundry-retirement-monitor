@@ -1,6 +1,28 @@
 {
-  "date": "2026-06-14",
+  "date": "2026-06-15",
   "records": [
+    {
+      "model": "o1",
+      "version": "2024-12-17",
+      "lifecycle": "Deprecated",
+      "retirement_date": "2026-07-15",
+      "replacement": "—",
+      "raw_retirement_date": "2026-07-15",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "sora-2",
+      "version": "2025-10-06",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-07-15",
+      "replacement": "sora-2 (2025-12-08)",
+      "raw_retirement_date": "2026-07-15",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "DeepSeek-R1-0528",
       "version": "1",
