@@ -5,6 +5,7 @@ import json
 import logging
 import os
 import sys
+import urllib.error
 import urllib.request
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
@@ -71,8 +72,13 @@ def _send_email(subject: str, html_body: str) -> None:
             "Content-Type": "application/json",
         },
     )
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        logging.info("Resend 已接受邮件: status=%s", resp.status)
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            logging.info("Resend 已接受邮件: status=%s", resp.status)
+    except urllib.error.HTTPError as e:
+        body = e.read().decode("utf-8", "replace")
+        logging.error("Resend 拒绝(%s): %s", e.code, body)
+        raise
 
 
 def main() -> int:
