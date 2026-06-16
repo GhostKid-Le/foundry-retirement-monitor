@@ -58,7 +58,8 @@ def _send_email(subject: str, html_body: str) -> None:
         logging.warning("未配置 RESEND_API_KEY / MAIL_TO，跳过发信（仅写快照）")
         return
 
-    mail_from = os.environ.get("MAIL_FROM", "Foundry Monitor <onboarding@resend.dev>")
+    # 用 `or` 而非 get 默认值：workflow 注入空串 secret 时也能回退到默认发件人
+    mail_from = os.environ.get("MAIL_FROM") or "Foundry Monitor <onboarding@resend.dev>"
     recipients = [a.strip() for a in mail_to.replace(";", ",").split(",") if a.strip()]
     payload = json.dumps(
         {"from": mail_from, "to": recipients, "subject": subject, "html": html_body}
