@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-15",
+  "date": "2026-06-16",
   "records": [
     {
       "model": "o1",
@@ -10,7 +10,7 @@
       "raw_retirement_date": "2026-07-15",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "sora-2",
@@ -21,7 +21,7 @@
       "raw_retirement_date": "2026-07-15",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "DeepSeek-R1-0528",
