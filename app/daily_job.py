@@ -70,6 +70,9 @@ def _send_email(subject: str, html_body: str) -> None:
         headers={
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
+            # 默认 Python-urllib UA 会被 Resend 前置的 Cloudflare 拦截(error 1010)
+            "User-Agent": "foundry-retirement-monitor/1.0",
+            "Accept": "application/json",
         },
     )
     try:
