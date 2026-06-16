@@ -5,6 +5,7 @@ import json
 import logging
 import os
 import sys
+import urllib.request
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
@@ -24,10 +25,10 @@ EMAIL_PAYLOAD_PATH = os.environ.get("EMAIL_PAYLOAD_PATH", "data/email.json")
 
 
 def _write_email_payload(subject: str, html_body: str, changed: bool) -> None:
-    """把渲染好的邮件写成 JSON，供 Power Automate 定时拉取后发送。
+    """把渲染好的邮件写成 JSON快照，随快照一起 commit 回仓库作审计留痕。
 
-    不再主动 POST webhook：改由 Power Automate 的 Recurrence（定时）触发器
-    HTTP GET 本文件的公开 raw URL，从根上消除“谁可以触发 webhook”的问题（合规）。
+    发信本身由 GitHub Actions 调 Resend API 直接完成（见 _send_email），
+    本文件仅供“今天发了什么”的可追溯记录，不再被外部拉取。
     """
     payload = {
         "subject": subject,
@@ -40,7 +41,38 @@ def _write_email_payload(subject: str, html_body: str, changed: bool) -> None:
     out.write_text(
         json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
     )
-    logging.info("已写出邮件载荷: %s (changed=%s)", out, changed)
+    logging.info("已写出邮件快照: %s (changed=%s)", out, changed)
+
+
+def _send_email(subject: str, html_body: str) -> None:
+    """通过 Resend API 直接发信。
+
+    需环境变量 RESEND_API_KEY 与 MAIL_TO（多收件人逗号/分号分隔）；
+    MAIL_FROM 可选，默认用 Resend 测试发件地址。缺密钥时（如本地）
+    跳过发送、仅保留快照，便于安全调试。
+    """
+    api_key = os.environ.get("RESEND_API_KEY")
+    mail_to = os.environ.get("MAIL_TO")
+    if not (api_key and mail_to):
+        logging.warning("未配置 RESEND_API_KEY / MAIL_TO，跳过发信（仅写快照）")
+        return
+
+    mail_from = os.environ.get("MAIL_FROM", "Foundry Monitor <onboarding@resend.dev>")
+    recipients = [a.strip() for a in mail_to.replace(";", ",").split(",") if a.strip()]
+    payload = json.dumps(
+        {"from": mail_from, "to": recipients, "subject": subject, "html": html_body}
+    ).encode("utf-8")
+    req = urllib.request.Request(
+        "https://api.resend.com/emails",
+        data=payload,
+        method="POST",
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        },
+    )
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        logging.info("Resend 已接受邮件: status=%s", resp.status)
 
 
 def main() -> int:
@@ -97,6 +129,7 @@ def main() -> int:
         )
 
     _write_email_payload(subject, html_body, changes["changed"])
+    _send_email(subject, html_body)
     logging.info("=== 完成 ===")
     return 0
 

@@ -1,15 +1,15 @@
-name: Daily Email (target ~07:17 CST, may drift later)
+name: Daily Email (send via Resend ~08:30 CST)
 
 on:
   schedule:
-    # 23:17 UTC = 07:17 Asia/Shanghai
-    # 故意挑非整点/半点冷门分钟，规避 GitHub Actions 高峰排队
-    # 仍可能被延迟 1-N 小时（免费 cron 无 SLA），目标是大概率在北京时间上午到达
-    - cron: '17 23 * * *'
+    # 00:30 UTC = 08:30 Asia/Shanghai
+    # GitHub Actions 直接调 Resend API 发信；免费 cron 无 SLA，可能延迟 1-N 小时
+    # 故邮件大概率在北京时间 08:30–09:xx 送达
+    - cron: '30 0 * * *'
   workflow_dispatch:
 
 permissions:
-  contents: write   # 提交快照（含 email.json）回 main
+  contents: write   # 提交快照（含 email.json 审计留痕）回 main
 
 jobs:
   email:
@@ -33,8 +33,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r app/requirements.txt
 
-      - name: Run daily monitor (fetch + diff + write email payload)
+      - name: Run daily monitor (fetch + diff + send email via Resend)
         env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          MAIL_FROM: ${{ secrets.MAIL_FROM }}
+          MAIL_TO: ${{ secrets.MAIL_TO }}
           HISTORY_PATH: ../data/history.json
           EMAIL_PAYLOAD_PATH: ../data/email.json
           TZ: Asia/Shanghai
