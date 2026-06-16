@@ -5,9 +5,8 @@ import json
 import logging
 import os
 import sys
-import urllib.error
-import urllib.request
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
+from pathlib import Path
 
 import foundry_monitor as fm
 import storage
@@ -21,20 +20,27 @@ SOURCE_URL = os.environ.get(
 WINDOW_DAYS = int(os.environ.get("WINDOW_DAYS", "30"))
 
 
-def _send_email(subject: str, html_body: str) -> None:
-    webhook_url = os.environ.get("MAILER_WEBHOOK_URL")
-    if not webhook_url:
-        raise RuntimeError("MAILER_WEBHOOK_URL 未配置")
+EMAIL_PAYLOAD_PATH = os.environ.get("EMAIL_PAYLOAD_PATH", "data/email.json")
 
-    payload = json.dumps({"subject": subject, "html": html_body}).encode("utf-8")
-    req = urllib.request.Request(
-        webhook_url,
-        data=payload,
-        method="POST",
-        headers={"Content-Type": "application/json"},
+
+def _write_email_payload(subject: str, html_body: str, changed: bool) -> None:
+    """把渲染好的邮件写成 JSON，供 Power Automate 定时拉取后发送。
+
+    不再主动 POST webhook：改由 Power Automate 的 Recurrence（定时）触发器
+    HTTP GET 本文件的公开 raw URL，从根上消除“谁可以触发 webhook”的问题（合规）。
+    """
+    payload = {
+        "subject": subject,
+        "html": html_body,
+        "changed": changed,
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+    }
+    out = Path(EMAIL_PAYLOAD_PATH)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
     )
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        logging.info("邮件 webhook 已提交: status=%s", resp.status)
+    logging.info("已写出邮件载荷: %s (changed=%s)", out, changed)
 
 
 def main() -> int:
@@ -90,7 +96,7 @@ def main() -> int:
             f"({len(window_records)} 条)"
         )
 
-    _send_email(subject, html_body)
+    _write_email_payload(subject, html_body, changes["changed"])
     logging.info("=== 完成 ===")
     return 0
 

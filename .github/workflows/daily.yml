@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write   # 提交快照回 main
+  contents: write   # 提交快照（含 email.json）回 main
 
 jobs:
   email:
@@ -33,10 +33,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r app/requirements.txt
 
-      - name: Run daily monitor (fetch + diff + email)
+      - name: Run daily monitor (fetch + diff + write email payload)
         env:
-          MAILER_WEBHOOK_URL: ${{ secrets.MAILER_WEBHOOK_URL }}
           HISTORY_PATH: ../data/history.json
+          EMAIL_PAYLOAD_PATH: ../data/email.json
           TZ: Asia/Shanghai
         working-directory: app
         run: |
