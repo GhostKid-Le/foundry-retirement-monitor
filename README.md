@@ -20,7 +20,7 @@
 │       2) actions/deploy-pages       → 部署到 GitHub Pages            │
 │                                                                      │
 │  .github/workflows/daily.yml      （每日邮件）                        │
-│    └─ schedule: 30 0 * * *  (UTC = 08:30 CST 发送，免费 cron 可能延迟) │
+│    └─ schedule: 17 23 * * * (UTC = 07:17 CST 发送，免费 cron 可能延迟) │
 │       1) python app/daily_job.py → 抓取 + diff + 渲染 HTML          │
 │       2) 调 Resend API 直接发信 + commit 快照(history/email.json)    │
 │                                                                      │
@@ -39,14 +39,14 @@
 
 **两个 workflow 各司其职**：
 - `refresh.yml` —— 每小时整点把最新内容刷到 GitHub Pages（**不发邮件**）
-- `daily.yml` —— 每日北京时间 **08:30**（免费 cron 可能延迟到 08:30–09:xx）启动，抓取 + diff + 渲染 + 调 Resend API 发信 + commit 快照（**不部署 Pages**）
+- `daily.yml` —— 每日北京时间 **07:17**（免费 cron 可能延迟到上午稍晚）启动，抓取 + diff + 渲染 + 调 Resend API 发信 + commit 快照（**不部署 Pages**）
 
 **特点**：
 - ✅ 0 云成本（GitHub Actions 公共 repo 免费）
 - ✅ 0 维护：不存在 "AKS 被停了导致漏发邮件" 这种故障模式
 - ✅ 历史快照走 git history，比 PVC 更可靠、可审计
 - ✅ HTTPS 自动证书（GitHub Pages 内置）
-- ✅ 邮件每天一封（北京 08:30 前后），不会因每小时刷新页面而被刷屏
+- ✅ 邮件每天一封（北京 07:17 前后），不会因每小时刷新页面而被刷屏
 - ✅ 无入站 webhook、无 Entra 应用：GitHub Actions 持密钥主动外发，外部任何人无法触发（只能靠 schedule / 仓库写权限手动触发）
 
 ---
@@ -57,7 +57,7 @@
 foundry-retirement-monitor/
 ├── .github/workflows/
 │   ├── refresh.yml               # 每小时整点刷新 GitHub Pages
-│   ├── daily.yml                 # 每日北京 08:30 抓取+diff+Resend 发信+commit 快照
+│   ├── daily.yml                 # 每日北京 07:17 抓取+diff+Resend 发信+commit 快照
 ├── app/
 │   ├── foundry_monitor.py        # 抓取 / 解析 / diff / 渲染 HTML
 │   ├── storage.py                # JSON 历史（默认 data/history.json）
@@ -112,7 +112,7 @@ cd foundry-retirement-monitor
 2. <https://github.com/GhostKid-Le/foundry-retirement-monitor/actions/workflows/daily.yml> → **Run workflow** → 应收到一封邮件，且 `data/{email,history}.json` 被 commit 进 main
 3. 没收到？看该 run 日志：「Resend 已接受邮件」=成功；「未配置 RESEND_API_KEY / MAIL_TO」=Secret 没加好；若 Resend 报 403/422，多半是发件人未验证（见步骤 2）或收件人不被 `onboarding@resend.dev` 允许
 
-之后每小时整点自动刷页面、每天北京 08:30 前后自动发邮件，无需任何干预。
+之后每小时整点自动刷页面、每天北京 07:17 前后自动发邮件，无需任何干预。
 
 ---
 
@@ -132,7 +132,7 @@ cd foundry-retirement-monitor
 
 ### 改触发时间
 - **页面刷新频率**：`refresh.yml` 的 `cron: '0 * * * *'`（每小时整点 UTC = 每小时整点 CST）。改成每 30 分钟：`'*/30 * * * *'`。
-- **邮件发送时间**：`daily.yml` 的 `cron: '30 0 * * *'`（UTC 00:30 = 北京时间 08:30）。免费 GitHub cron 无 SLA，可能延迟 1-N 小时，故实际多在 08:30–09:xx 到达。想更早就把它提前。
+- **邮件发送时间**：`daily.yml` 的 `cron: '17 23 * * *'`（UTC 23:17 = 北京时间次日 07:17）。免费 GitHub cron 无 SLA，可能延迟 1-N 小时，实际可能延后到上午稍晚到达。
 
 ### 改收件人 / 发件人
 改 GitHub Secret 的 `MAIL_TO` / `MAIL_FROM` 即可，不动代码、不动 workflow。
@@ -171,7 +171,7 @@ uvicorn web:app --reload --port 8000
 - **页面打开是 404**：第一次部署有 1-2 分钟延迟；之后看 Actions 是否绿，Pages settings 里是否显示 site URL。
 - **抓取失败 — MS Learn 偶发 anti-bot**：workflow 日志里看 HTTP 状态码。`foundry_monitor.fetch_html` 已有多个回落 URL，重跑一次通常能过；`build_site.py` 抓不到时会渲染 "⚠️ 抓取失败" 横幅而不会让 workflow 失败。
 - **快照没被 commit**：daily.yml 的 commit 步骤会跳过 "no changes" 的提交，这是正常的（说明今天数据没变）。
-- **GitHub cron 延迟**：免费 runner 调度高峰期可能延迟 1-N 小时，北京 08:30 的邮件偶尔到 09:xx，属正常。想更准时可把 `daily.yml` 的 cron 适当提前。
+- **GitHub cron 延迟**：免费 runner 调度高峰期可能延迟 1-N 小时，北京 07:17 计划的邮件实际可能延后数小时，属正常。想要准点需改用有 SLA 的外部触发器。
 
 ---
 

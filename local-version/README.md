@@ -1,6 +1,6 @@
 # 本地版（local-version）
 
-云端版（Azure Functions）部署在 `..\app\`，每天 08:30 自动跑 + 发邮件 + 公开 URL。
+云端版（Azure Functions）部署在 `..\app\`，每天 07:17 自动跑 + 发邮件 + 公开 URL。
 这里是**独立、可离线运行**的版本——一个 Python 脚本，跑完直接在浏览器打开 HTML。
 
 ## 用法

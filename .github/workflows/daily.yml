@@ -1,11 +1,11 @@
-name: Daily Email (send via Resend ~08:30 CST)
+name: Daily Email (send via Resend ~07:17 CST)
 
 on:
   schedule:
-    # 00:30 UTC = 08:30 Asia/Shanghai
+    # 23:17 UTC = 07:17 Asia/Shanghai（次日）
     # GitHub Actions 直接调 Resend API 发信；免费 cron 无 SLA，可能延迟 1-N 小时
-    # 故邮件大概率在北京时间 08:30–09:xx 送达
-    - cron: '30 0 * * *'
+    # 故邮件大概率在北京时间 07:17 之后的上午送达
+    - cron: '17 23 * * *'
   workflow_dispatch:
 
 permissions:
