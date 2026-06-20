@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-19",
+  "date": "2026-06-20",
   "records": [
     {
       "model": "o1",
@@ -28,7 +28,7 @@
       "version": "1",
       "lifecycle": "Legacy",
       "retirement_date": "2026-07-13",
-      "replacement": "—",
+      "replacement": "DeepSeek-V4-Pro",
       "raw_retirement_date": "2026-07-13",
       "conflict": "No",
       "conflict_note": "",
@@ -39,7 +39,7 @@
       "version": "1",
       "lifecycle": "Legacy",
       "retirement_date": "2026-07-13",
-      "replacement": "DeepSeek-V4-Flash, DeepSeek-V4-Pro",
+      "replacement": "DeepSeek-V4-Flash",
       "raw_retirement_date": "2026-07-13",
       "conflict": "No",
       "conflict_note": "",
@@ -50,7 +50,7 @@
       "version": "1",
       "lifecycle": "Legacy",
       "retirement_date": "2026-07-13",
-      "replacement": "DeepSeek-V4-Flash, DeepSeek-V4-Pro",
+      "replacement": "DeepSeek-V4-Flash",
       "raw_retirement_date": "2026-07-13",
       "conflict": "No",
       "conflict_note": "",
