@@ -1,6 +1,28 @@
 {
-  "date": "2026-06-22",
+  "date": "2026-06-23",
   "records": [
+    {
+      "model": "gpt-audio-mini",
+      "version": "2025-10-06",
+      "lifecycle": "GA",
+      "retirement_date": "2026-07-23",
+      "replacement": "—",
+      "raw_retirement_date": "2026-07-23",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "gpt-realtime-mini",
+      "version": "2025-10-06",
+      "lifecycle": "GA",
+      "retirement_date": "2026-07-23",
+      "replacement": "—",
+      "raw_retirement_date": "2026-07-23",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "o1",
       "version": "2024-12-17",
