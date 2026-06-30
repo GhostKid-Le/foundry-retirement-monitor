@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-29",
+  "date": "2026-06-30",
   "records": [
     {
       "model": "gpt-audio-mini",
@@ -195,50 +195,6 @@
       "retirement_date": "2026-07-01",
       "replacement": "—",
       "raw_retirement_date": "2026-07-01",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "gpt-5-chat",
-      "version": "2025-08-07",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-06-29",
-      "replacement": "gpt-chat-latest",
-      "raw_retirement_date": "2026-06-29",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "gpt-5.1-chat",
-      "version": "2025-11-13",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-06-29",
-      "replacement": "gpt-chat-latest",
-      "raw_retirement_date": "2026-06-29",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "gpt-5.2-chat",
-      "version": "2026-02-10",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-06-29",
-      "replacement": "gpt-chat-latest",
-      "raw_retirement_date": "2026-06-29",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "gpt-5.3-chat",
-      "version": "2026-03-03",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-06-29",
-      "replacement": "gpt-chat-latest",
-      "raw_retirement_date": "2026-06-29",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
