@@ -1,6 +1,61 @@
 {
-  "date": "2026-06-30",
+  "date": "2026-07-01",
   "records": [
+    {
+      "model": "Stable-Diffusion-3.5-Large",
+      "version": "1",
+      "lifecycle": "Deprecated",
+      "retirement_date": "2026-07-31",
+      "replacement": "—",
+      "raw_retirement_date": "2026-07-31",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "Stable-Image-Core",
+      "version": "1",
+      "lifecycle": "Deprecated",
+      "retirement_date": "2026-07-31",
+      "replacement": "—",
+      "raw_retirement_date": "2026-07-31",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "Stable-Image-Ultra",
+      "version": "1",
+      "lifecycle": "Deprecated",
+      "retirement_date": "2026-07-31",
+      "replacement": "—",
+      "raw_retirement_date": "2026-07-31",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "model-router",
+      "version": "2025-05-19",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-07-31",
+      "replacement": "—",
+      "raw_retirement_date": "2026-07-31",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "model-router",
+      "version": "2025-08-07",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-07-31",
+      "replacement": "—",
+      "raw_retirement_date": "2026-07-31",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "gpt-audio-mini",
       "version": "2025-10-06",
