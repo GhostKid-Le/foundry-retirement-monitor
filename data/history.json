@@ -1,6 +1,39 @@
 {
-  "date": "2026-07-01",
+  "date": "2026-07-02",
   "records": [
+    {
+      "model": "FW-GLM-5.1",
+      "version": "1",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-08-01",
+      "replacement": "—",
+      "raw_retirement_date": "2026-08-01",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "FW-Qwen3.5-122B-A10B",
+      "version": "1",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-08-01",
+      "replacement": "—",
+      "raw_retirement_date": "2026-08-01",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "FW-Qwen3.5-397B-A17B",
+      "version": "1",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-08-01",
+      "replacement": "—",
+      "raw_retirement_date": "2026-08-01",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "Stable-Diffusion-3.5-Large",
       "version": "1",
@@ -10,7 +43,7 @@
       "raw_retirement_date": "2026-07-31",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "Stable-Image-Core",
@@ -21,7 +54,7 @@
       "raw_retirement_date": "2026-07-31",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "Stable-Image-Ultra",
@@ -32,7 +65,7 @@
       "raw_retirement_date": "2026-07-31",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "model-router",
@@ -43,7 +76,7 @@
       "raw_retirement_date": "2026-07-31",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "model-router",
@@ -54,7 +87,7 @@
       "raw_retirement_date": "2026-07-31",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "gpt-audio-mini",
@@ -140,116 +173,6 @@
       "retirement_date": "2026-07-13",
       "replacement": "DeepSeek-V4-Flash",
       "raw_retirement_date": "2026-07-13",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "FW-DeepSeek-V3.1",
-      "version": "1",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-07-01",
-      "replacement": "—",
-      "raw_retirement_date": "2026-07-01",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "FW-DeepSeek-V3.2",
-      "version": "1",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-07-01",
-      "replacement": "—",
-      "raw_retirement_date": "2026-07-01",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "FW-GLM-4.7",
-      "version": "1",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-07-01",
-      "replacement": "—",
-      "raw_retirement_date": "2026-07-01",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "FW-GLM-5",
-      "version": "1",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-07-01",
-      "replacement": "—",
-      "raw_retirement_date": "2026-07-01",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "FW-GPT-OSS-120B",
-      "version": "1",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-07-01",
-      "replacement": "—",
-      "raw_retirement_date": "2026-07-01",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "FW-Kimi-K2-Instruct-0905",
-      "version": "1",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-07-01",
-      "replacement": "—",
-      "raw_retirement_date": "2026-07-01",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "FW-Kimi-K2-Thinking",
-      "version": "1",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-07-01",
-      "replacement": "—",
-      "raw_retirement_date": "2026-07-01",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "FW-Kimi-K2.5",
-      "version": "1",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-07-01",
-      "replacement": "—",
-      "raw_retirement_date": "2026-07-01",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "FW-MiniMax-M2.5",
-      "version": "1",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-07-01",
-      "replacement": "—",
-      "raw_retirement_date": "2026-07-01",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "FW-Qwen3-14B",
-      "version": "1",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-07-01",
-      "replacement": "—",
-      "raw_retirement_date": "2026-07-01",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
