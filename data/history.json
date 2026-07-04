@@ -1,5 +1,5 @@
 {
-  "date": "2026-07-03",
+  "date": "2026-07-04",
   "records": [
     {
       "model": "o3-mini",
@@ -10,7 +10,7 @@
       "raw_retirement_date": "2026-08-02",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "FW-GLM-5.1",
