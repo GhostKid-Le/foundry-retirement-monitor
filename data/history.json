@@ -1,6 +1,17 @@
 {
-  "date": "2026-07-05",
+  "date": "2026-07-06",
   "records": [
+    {
+      "model": "claude-opus-4-1",
+      "version": "—",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-08-05",
+      "replacement": "claude-opus-4-8",
+      "raw_retirement_date": "2026-08-05",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "o3-mini",
       "version": "2025-01-31",
