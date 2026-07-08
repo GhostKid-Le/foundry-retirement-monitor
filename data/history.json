@@ -1,5 +1,5 @@
 {
-  "date": "2026-07-07",
+  "date": "2026-07-08",
   "records": [
     {
       "model": "claude-opus-4-1",
@@ -8,17 +8,6 @@
       "retirement_date": "2026-08-05",
       "replacement": "claude-opus-4-8",
       "raw_retirement_date": "2026-08-05",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "o3-mini",
-      "version": "2025-01-31",
-      "lifecycle": "Deprecated",
-      "retirement_date": "2026-08-02",
-      "replacement": "o4-mini",
-      "raw_retirement_date": "2026-08-02",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
@@ -85,61 +74,6 @@
       "retirement_date": "2026-07-31",
       "replacement": "—",
       "raw_retirement_date": "2026-07-31",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "model-router",
-      "version": "2025-05-19",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-07-31",
-      "replacement": "—",
-      "raw_retirement_date": "2026-07-31",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "model-router",
-      "version": "2025-08-07",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-07-31",
-      "replacement": "—",
-      "raw_retirement_date": "2026-07-31",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "gpt-audio-mini",
-      "version": "2025-10-06",
-      "lifecycle": "GA",
-      "retirement_date": "2026-07-23",
-      "replacement": "—",
-      "raw_retirement_date": "2026-07-23",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "gpt-realtime-mini",
-      "version": "2025-10-06",
-      "lifecycle": "GA",
-      "retirement_date": "2026-07-23",
-      "replacement": "—",
-      "raw_retirement_date": "2026-07-23",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "o1",
-      "version": "2024-12-17",
-      "lifecycle": "Deprecated",
-      "retirement_date": "2026-07-15",
-      "replacement": "—",
-      "raw_retirement_date": "2026-07-15",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
