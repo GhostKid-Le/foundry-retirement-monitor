@@ -1,5 +1,5 @@
 {
-  "date": "2026-07-08",
+  "date": "2026-07-09",
   "records": [
     {
       "model": "claude-opus-4-1",
@@ -11,6 +11,17 @@
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
+    },
+    {
+      "model": "gpt-chat-latest",
+      "version": "2026-05-05",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-08-05",
+      "replacement": "—",
+      "raw_retirement_date": "2026-08-05",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
     },
     {
       "model": "FW-GLM-5.1",
@@ -77,6 +88,17 @@
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
+    },
+    {
+      "model": "gpt-realtime-mini",
+      "version": "2025-10-06",
+      "lifecycle": "GA",
+      "retirement_date": "2026-07-23",
+      "replacement": "—",
+      "raw_retirement_date": "2026-07-23",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
     },
     {
       "model": "mistral-document-ai-2505",
