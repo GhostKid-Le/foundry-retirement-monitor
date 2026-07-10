@@ -1,5 +1,5 @@
 {
-  "date": "2026-07-09",
+  "date": "2026-07-10",
   "records": [
     {
       "model": "claude-opus-4-1",
@@ -21,7 +21,7 @@
       "raw_retirement_date": "2026-08-05",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "FW-GLM-5.1",
@@ -98,7 +98,7 @@
       "raw_retirement_date": "2026-07-23",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "mistral-document-ai-2505",
