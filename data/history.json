@@ -1,5 +1,5 @@
 {
-  "date": "2026-07-14",
+  "date": "2026-07-15",
   "records": [
     {
       "model": "DeepSeek-R1",
@@ -10,7 +10,7 @@
       "raw_retirement_date": "2026-08-13",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "claude-opus-4-1",
