@@ -1,6 +1,28 @@
 {
-  "date": "2026-07-15",
+  "date": "2026-07-16",
   "records": [
+    {
+      "model": "MAI-Image-2",
+      "version": "2026-02-20",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-08-15",
+      "replacement": "MAI-Image-2.5",
+      "raw_retirement_date": "2026-08-15",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "MAI-Image-2e",
+      "version": "2026-04-09",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-08-15",
+      "replacement": "MAI-Image-2.5-Flash",
+      "raw_retirement_date": "2026-08-15",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "DeepSeek-R1",
       "version": "1",
@@ -107,28 +129,6 @@
       "retirement_date": "2026-07-23",
       "replacement": "—",
       "raw_retirement_date": "2026-07-23",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "mistral-document-ai-2505",
-      "version": "1",
-      "lifecycle": "GA",
-      "retirement_date": "2026-07-15",
-      "replacement": "mistral-document-ai-2512, mistral-ocr-4-0",
-      "raw_retirement_date": "2026-07-15",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "sora-2",
-      "version": "2025-10-06",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-07-15",
-      "replacement": "sora-2 (2025-12-08)",
-      "raw_retirement_date": "2026-07-15",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
