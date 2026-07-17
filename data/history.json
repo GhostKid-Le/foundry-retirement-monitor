@@ -1,5 +1,5 @@
 {
-  "date": "2026-07-16",
+  "date": "2026-07-17",
   "records": [
     {
       "model": "MAI-Image-2",
@@ -10,7 +10,7 @@
       "raw_retirement_date": "2026-08-15",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "MAI-Image-2e",
@@ -21,7 +21,7 @@
       "raw_retirement_date": "2026-08-15",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "DeepSeek-R1",
@@ -132,6 +132,17 @@
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
+    },
+    {
+      "model": "mistral-document-ai-2505",
+      "version": "1",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-07-20",
+      "replacement": "mistral-document-ai-2512, mistral-ocr-4-0",
+      "raw_retirement_date": "2026-07-20",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
     }
   ]
 }
