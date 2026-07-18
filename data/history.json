@@ -1,5 +1,5 @@
 {
-  "date": "2026-07-17",
+  "date": "2026-07-18",
   "records": [
     {
       "model": "MAI-Image-2",
@@ -142,7 +142,7 @@
       "raw_retirement_date": "2026-07-20",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     }
   ]
 }
