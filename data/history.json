@@ -1,5 +1,5 @@
 {
-  "date": "2026-07-21",
+  "date": "2026-07-22",
   "records": [
     {
       "model": "MAI-Image-2",
@@ -35,6 +35,28 @@
       "is_new": false
     },
     {
+      "model": "FW-GLM-5.1",
+      "version": "1",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-08-07",
+      "replacement": "—",
+      "raw_retirement_date": "2026-08-07",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": false
+    },
+    {
+      "model": "FW-MiniMax-M2.5",
+      "version": "1",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-08-07",
+      "replacement": "—",
+      "raw_retirement_date": "2026-08-07",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
       "model": "claude-opus-4-1",
       "version": "—",
       "lifecycle": "Preview",
@@ -52,17 +74,6 @@
       "retirement_date": "2026-08-05",
       "replacement": "—",
       "raw_retirement_date": "2026-08-05",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "FW-GLM-5.1",
-      "version": "1",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-08-01",
-      "replacement": "—",
-      "raw_retirement_date": "2026-08-01",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
