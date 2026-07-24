@@ -1,5 +1,5 @@
 {
-  "date": "2026-07-23",
+  "date": "2026-07-24",
   "records": [
     {
       "model": "MAI-Image-2",
@@ -129,17 +129,6 @@
       "retirement_date": "2026-07-31",
       "replacement": "—",
       "raw_retirement_date": "2026-07-31",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "gpt-realtime-mini",
-      "version": "2025-10-06",
-      "lifecycle": "GA",
-      "retirement_date": "2026-07-23",
-      "replacement": "—",
-      "raw_retirement_date": "2026-07-23",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
