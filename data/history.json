@@ -1,6 +1,28 @@
 {
-  "date": "2026-07-28",
+  "date": "2026-07-29",
   "records": [
+    {
+      "model": "gpt-chat-latest",
+      "version": "2026-05-28",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-08-28",
+      "replacement": "—",
+      "raw_retirement_date": "2026-08-28",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "gpt-chat-latest",
+      "version": "2026-06-24",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-08-28",
+      "replacement": "—",
+      "raw_retirement_date": "2026-08-28",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "MAI-Image-2",
       "version": "2026-02-20",
