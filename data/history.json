@@ -1,5 +1,5 @@
 {
-  "date": "2026-08-05",
+  "date": "2026-08-06",
   "records": [
     {
       "model": "TimeGEN-1",
@@ -173,39 +173,6 @@
       "retirement_date": "2026-08-13",
       "replacement": "DeepSeek-V4-Pro",
       "raw_retirement_date": "2026-08-13",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "claude-opus-4-1",
-      "version": "—",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-08-05",
-      "replacement": "claude-opus-4-8",
-      "raw_retirement_date": "2026-08-05",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "gpt-chat-latest",
-      "version": "2026-05-05",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-08-05",
-      "replacement": "—",
-      "raw_retirement_date": "2026-08-05",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "gpt-chat-latest",
-      "version": "2026-05-05",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-08-05",
-      "replacement": "—",
-      "raw_retirement_date": "2026-08-05",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
