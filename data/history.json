@@ -1,5 +1,5 @@
 {
-  "date": "2026-08-13",
+  "date": "2026-08-14",
   "records": [
     {
       "model": "TimeGEN-1",
@@ -162,17 +162,6 @@
       "retirement_date": "2026-08-15",
       "replacement": "MAI-Image-2.5-Flash",
       "raw_retirement_date": "2026-08-15",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "DeepSeek-R1",
-      "version": "1",
-      "lifecycle": "Legacy",
-      "retirement_date": "2026-08-13",
-      "replacement": "DeepSeek-V4-Pro",
-      "raw_retirement_date": "2026-08-13",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
