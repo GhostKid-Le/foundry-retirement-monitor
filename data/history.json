@@ -1,6 +1,17 @@
 {
-  "date": "2026-08-15",
+  "date": "2026-08-16",
   "records": [
+    {
+      "model": "sora-2",
+      "version": "2025-12-08",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-09-15",
+      "replacement": "—",
+      "raw_retirement_date": "2026-09-15",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "TimeGEN-1",
       "version": "1",
@@ -47,28 +58,6 @@
     },
     {
       "model": "model-router",
-      "version": "2025-05-19",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-08-30",
-      "replacement": "—",
-      "raw_retirement_date": "2026-08-30",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "model-router",
-      "version": "2025-08-07",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-08-30",
-      "replacement": "—",
-      "raw_retirement_date": "2026-08-30",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "model-router",
       "version": "2025-08-07",
       "lifecycle": "Preview",
       "retirement_date": "2026-08-30",
@@ -85,83 +74,6 @@
       "retirement_date": "2026-08-28",
       "replacement": "—",
       "raw_retirement_date": "2026-08-28",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "gpt-chat-latest",
-      "version": "2026-05-28",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-08-28",
-      "replacement": "—",
-      "raw_retirement_date": "2026-08-28",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "gpt-chat-latest",
-      "version": "2026-06-24",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-08-28",
-      "replacement": "—",
-      "raw_retirement_date": "2026-08-28",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "gpt-chat-latest",
-      "version": "2026-06-24",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-08-28",
-      "replacement": "—",
-      "raw_retirement_date": "2026-08-28",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "MAI-Image-2",
-      "version": "2026-02-20",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-08-15",
-      "replacement": "MAI-Image-2.5",
-      "raw_retirement_date": "2026-08-15",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "MAI-Image-2",
-      "version": "2026-02-20",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-08-15",
-      "replacement": "MAI-Image-2.5",
-      "raw_retirement_date": "2026-08-15",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "MAI-Image-2e",
-      "version": "2026-04-09",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-08-15",
-      "replacement": "MAI-Image-2.5-Flash",
-      "raw_retirement_date": "2026-08-15",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "MAI-Image-2e",
-      "version": "2026-04-09",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-08-15",
-      "replacement": "MAI-Image-2.5-Flash",
-      "raw_retirement_date": "2026-08-15",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
