@@ -1,5 +1,5 @@
 {
-  "date": "2026-08-16",
+  "date": "2026-08-17",
   "records": [
     {
       "model": "sora-2",
@@ -10,7 +10,7 @@
       "raw_retirement_date": "2026-09-15",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "TimeGEN-1",
