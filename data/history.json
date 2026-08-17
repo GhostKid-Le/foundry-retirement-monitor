@@ -1,6 +1,17 @@
 {
-  "date": "2026-08-17",
+  "date": "2026-08-18",
   "records": [
+    {
+      "model": "MAI-Transcribe-1",
+      "version": "2026-01-23",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-09-15",
+      "replacement": "MAI-Transcribe-1.5",
+      "raw_retirement_date": "2026-09-15",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "sora-2",
       "version": "2025-12-08",
