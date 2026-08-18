@@ -1,5 +1,5 @@
 {
-  "date": "2026-08-18",
+  "date": "2026-08-19",
   "records": [
     {
       "model": "MAI-Transcribe-1",
@@ -10,7 +10,7 @@
       "raw_retirement_date": "2026-09-15",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "sora-2",
