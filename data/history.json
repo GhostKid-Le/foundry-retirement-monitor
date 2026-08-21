@@ -1,6 +1,17 @@
 {
-  "date": "2026-08-21",
+  "date": "2026-08-22",
   "records": [
+    {
+      "model": "gpt-realtime-mini",
+      "version": "2025-10-06",
+      "lifecycle": "GA",
+      "retirement_date": "2026-09-21",
+      "replacement": "—",
+      "raw_retirement_date": "2026-09-21",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "MAI-Transcribe-1",
       "version": "2026-01-23",
