@@ -1,5 +1,5 @@
 {
-  "date": "2026-08-22",
+  "date": "2026-08-23",
   "records": [
     {
       "model": "gpt-realtime-mini",
@@ -10,7 +10,7 @@
       "raw_retirement_date": "2026-09-21",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "MAI-Transcribe-1",
