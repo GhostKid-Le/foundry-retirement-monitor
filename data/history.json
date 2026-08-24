@@ -1,6 +1,17 @@
 {
-  "date": "2026-08-24",
+  "date": "2026-08-25",
   "records": [
+    {
+      "model": "gpt-chat-latest",
+      "version": "2026-06-24",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-09-24",
+      "replacement": "—",
+      "raw_retirement_date": "2026-09-24",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "gpt-realtime-mini",
       "version": "2025-10-06",
