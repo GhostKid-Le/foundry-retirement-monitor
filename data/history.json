@@ -1,5 +1,5 @@
 {
-  "date": "2026-08-25",
+  "date": "2026-08-26",
   "records": [
     {
       "model": "gpt-chat-latest",
@@ -10,7 +10,7 @@
       "raw_retirement_date": "2026-09-24",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "gpt-realtime-mini",
@@ -29,17 +29,6 @@
       "lifecycle": "Preview",
       "retirement_date": "2026-09-15",
       "replacement": "MAI-Transcribe-1.5",
-      "raw_retirement_date": "2026-09-15",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "sora-2",
-      "version": "2025-12-08",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-09-15",
-      "replacement": "—",
       "raw_retirement_date": "2026-09-15",
       "conflict": "No",
       "conflict_note": "",
