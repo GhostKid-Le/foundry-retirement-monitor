@@ -1,5 +1,5 @@
 {
-  "date": "2026-08-30",
+  "date": "2026-08-31",
   "records": [
     {
       "model": "gpt-chat-latest",
@@ -63,28 +63,6 @@
       "retirement_date": "2026-08-31",
       "replacement": "tsuzumi2",
       "raw_retirement_date": "2026-08-31",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "model-router",
-      "version": "2025-05-19",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-08-30",
-      "replacement": "—",
-      "raw_retirement_date": "2026-08-30",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "model-router",
-      "version": "2025-08-07",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-08-30",
-      "replacement": "—",
-      "raw_retirement_date": "2026-08-30",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
