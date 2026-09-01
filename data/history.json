@@ -1,6 +1,61 @@
 {
-  "date": "2026-08-31",
+  "date": "2026-09-01",
   "records": [
+    {
+      "model": "gpt-4o",
+      "version": "2024-05-13",
+      "lifecycle": "Deprecated",
+      "retirement_date": "2026-10-01",
+      "replacement": "gpt-5.1",
+      "raw_retirement_date": "2026-10-01",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "o3-mini",
+      "version": "2025-01-31",
+      "lifecycle": "Deprecated",
+      "retirement_date": "2026-10-01",
+      "replacement": "o4-mini",
+      "raw_retirement_date": "2026-10-01",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "MAI-Image-2.5",
+      "version": "2026-06-02",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-10-01",
+      "replacement": "—",
+      "raw_retirement_date": "2026-10-01",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "MAI-Image-2.5-Flash",
+      "version": "2026-06-02",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-10-01",
+      "replacement": "—",
+      "raw_retirement_date": "2026-10-01",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "MAI-Image-2.5-Pro",
+      "version": "2026-06-19",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-10-01",
+      "replacement": "—",
+      "raw_retirement_date": "2026-10-01",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "gpt-chat-latest",
       "version": "2026-06-24",
@@ -30,39 +85,6 @@
       "retirement_date": "2026-09-15",
       "replacement": "MAI-Transcribe-1.5",
       "raw_retirement_date": "2026-09-15",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "TimeGEN-1",
-      "version": "1",
-      "lifecycle": "Deprecated",
-      "retirement_date": "2026-08-31",
-      "replacement": "TimeGPT-1, TimegGPT-2.1",
-      "raw_retirement_date": "2026-08-31",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "gpt-realtime-2",
-      "version": "2026-05-06",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-08-31",
-      "replacement": "—",
-      "raw_retirement_date": "2026-08-31",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "tsuzumi-7b",
-      "version": "2",
-      "lifecycle": "Legacy",
-      "retirement_date": "2026-08-31",
-      "replacement": "tsuzumi2",
-      "raw_retirement_date": "2026-08-31",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
