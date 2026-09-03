@@ -1,6 +1,17 @@
 {
-  "date": "2026-09-02",
+  "date": "2026-09-03",
   "records": [
+    {
+      "model": "Kimi-K2.7-Code",
+      "version": "2026-06-12",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-10-03",
+      "replacement": "—",
+      "raw_retirement_date": "2026-10-03",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "gpt-4o",
       "version": "2024-05-13",
