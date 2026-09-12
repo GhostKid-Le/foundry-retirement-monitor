@@ -1,5 +1,5 @@
 {
-  "date": "2026-09-11",
+  "date": "2026-09-12",
   "records": [
     {
       "model": "Kimi-K2.7-Code",
@@ -18,17 +18,6 @@
       "lifecycle": "Deprecated",
       "retirement_date": "2026-10-01",
       "replacement": "gpt-5.1",
-      "raw_retirement_date": "2026-10-01",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "o3-mini",
-      "version": "2025-01-31",
-      "lifecycle": "Deprecated",
-      "retirement_date": "2026-10-01",
-      "replacement": "o4-mini",
       "raw_retirement_date": "2026-10-01",
       "conflict": "No",
       "conflict_note": "",
