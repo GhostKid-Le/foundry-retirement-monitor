@@ -1,6 +1,17 @@
 {
-  "date": "2026-09-12",
+  "date": "2026-09-13",
   "records": [
+    {
+      "model": "Cohere-command-a-plus-05-2026",
+      "version": "1",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-10-13",
+      "replacement": "—",
+      "raw_retirement_date": "2026-10-13",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "Kimi-K2.7-Code",
       "version": "2026-06-12",
