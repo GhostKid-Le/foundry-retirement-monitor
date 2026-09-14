@@ -1,5 +1,5 @@
 {
-  "date": "2026-09-13",
+  "date": "2026-09-14",
   "records": [
     {
       "model": "Cohere-command-a-plus-05-2026",
@@ -10,7 +10,7 @@
       "raw_retirement_date": "2026-10-13",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "Kimi-K2.7-Code",
