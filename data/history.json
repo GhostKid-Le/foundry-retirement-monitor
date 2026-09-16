@@ -1,5 +1,5 @@
 {
-  "date": "2026-09-15",
+  "date": "2026-09-16",
   "records": [
     {
       "model": "gpt-4o-mini-transcribe",
@@ -10,7 +10,7 @@
       "raw_retirement_date": "2026-10-15",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "gpt-4o-mini-tts",
@@ -21,7 +21,7 @@
       "raw_retirement_date": "2026-10-15",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "gpt-4o-transcribe",
@@ -32,7 +32,7 @@
       "raw_retirement_date": "2026-10-15",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "sora-2",
@@ -43,7 +43,7 @@
       "raw_retirement_date": "2026-10-15",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "Cohere-command-a-plus-05-2026",
@@ -129,17 +129,6 @@
       "retirement_date": "2026-09-21",
       "replacement": "—",
       "raw_retirement_date": "2026-09-21",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "MAI-Transcribe-1",
-      "version": "2026-01-23",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-09-15",
-      "replacement": "MAI-Transcribe-1.5",
-      "raw_retirement_date": "2026-09-15",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
