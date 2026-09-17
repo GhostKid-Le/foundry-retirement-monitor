@@ -1,6 +1,17 @@
 {
-  "date": "2026-09-16",
+  "date": "2026-09-17",
   "records": [
+    {
+      "model": "Cohere-command-a-plus-05-2026",
+      "version": "1",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-10-16",
+      "replacement": "coherelabs-command-a-plus-05-2026-fp8 1 , coherelabs-command-a-plus-05-2026-bf16 1 , coherelabs-command-a-plus-05-2026-w4a4 1",
+      "raw_retirement_date": "2026-10-16",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": false
+    },
     {
       "model": "gpt-4o-mini-transcribe",
       "version": "2025-03-20",
@@ -46,15 +57,15 @@
       "is_new": false
     },
     {
-      "model": "Cohere-command-a-plus-05-2026",
-      "version": "1",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-10-13",
+      "model": "gpt-4.1-nano",
+      "version": "2025-04-14",
+      "lifecycle": "Legacy",
+      "retirement_date": "2026-10-14",
       "replacement": "—",
-      "raw_retirement_date": "2026-10-13",
+      "raw_retirement_date": "2026-10-14",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": false
+      "is_new": true
     },
     {
       "model": "Kimi-K2.7-Code",
