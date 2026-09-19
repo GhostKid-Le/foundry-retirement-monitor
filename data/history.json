@@ -1,6 +1,50 @@
 {
-  "date": "2026-09-18",
+  "date": "2026-09-19",
   "records": [
+    {
+      "model": "claude-haiku-4-5",
+      "version": "1",
+      "lifecycle": "GA",
+      "retirement_date": "2026-10-19",
+      "replacement": "—",
+      "raw_retirement_date": "2026-10-19",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "claude-haiku-4-5",
+      "version": "2",
+      "lifecycle": "GA",
+      "retirement_date": "2026-10-19",
+      "replacement": "—",
+      "raw_retirement_date": "2026-10-19",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "claude-opus-4-5",
+      "version": "1",
+      "lifecycle": "GA",
+      "retirement_date": "2026-10-19",
+      "replacement": "—",
+      "raw_retirement_date": "2026-10-19",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "claude-sonnet-4-5",
+      "version": "1",
+      "lifecycle": "GA",
+      "retirement_date": "2026-10-19",
+      "replacement": "—",
+      "raw_retirement_date": "2026-10-19",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "Cohere-command-a-plus-05-2026",
       "version": "1",
@@ -52,17 +96,6 @@
       "retirement_date": "2026-10-15",
       "replacement": "—",
       "raw_retirement_date": "2026-10-15",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "gpt-4.1-nano",
-      "version": "2025-04-14",
-      "lifecycle": "Legacy",
-      "retirement_date": "2026-10-14",
-      "replacement": "—",
-      "raw_retirement_date": "2026-10-14",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
