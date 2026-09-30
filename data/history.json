@@ -1,5 +1,5 @@
 {
-  "date": "2026-09-29",
+  "date": "2026-09-30",
   "records": [
     {
       "model": "gpt-image-1",
@@ -8,50 +8,6 @@
       "retirement_date": "2026-10-23",
       "replacement": "—",
       "raw_retirement_date": "2026-10-23",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "claude-haiku-4-5",
-      "version": "1",
-      "lifecycle": "GA",
-      "retirement_date": "2026-10-19",
-      "replacement": "—",
-      "raw_retirement_date": "2026-10-19",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "claude-haiku-4-5",
-      "version": "2",
-      "lifecycle": "GA",
-      "retirement_date": "2026-10-19",
-      "replacement": "—",
-      "raw_retirement_date": "2026-10-19",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "claude-opus-4-5",
-      "version": "1",
-      "lifecycle": "GA",
-      "retirement_date": "2026-10-19",
-      "replacement": "—",
-      "raw_retirement_date": "2026-10-19",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "claude-sonnet-4-5",
-      "version": "1",
-      "lifecycle": "GA",
-      "retirement_date": "2026-10-19",
-      "replacement": "—",
-      "raw_retirement_date": "2026-10-19",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
