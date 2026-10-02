@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-01",
+  "date": "2026-10-02",
   "records": [
     {
       "model": "gpt-image-1",
@@ -85,39 +85,6 @@
       "retirement_date": "2026-10-03",
       "replacement": "—",
       "raw_retirement_date": "2026-10-03",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "MAI-Image-2.5",
-      "version": "2026-06-02",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-10-01",
-      "replacement": "—",
-      "raw_retirement_date": "2026-10-01",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "MAI-Image-2.5-Flash",
-      "version": "2026-06-02",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-10-01",
-      "replacement": "—",
-      "raw_retirement_date": "2026-10-01",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "MAI-Image-2.5-Pro",
-      "version": "2026-06-19",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-10-01",
-      "replacement": "—",
-      "raw_retirement_date": "2026-10-01",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
