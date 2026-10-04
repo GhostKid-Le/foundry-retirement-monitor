@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-03",
+  "date": "2026-10-04",
   "records": [
     {
       "model": "gpt-image-1",
@@ -74,17 +74,6 @@
       "retirement_date": "2026-10-14",
       "replacement": "—",
       "raw_retirement_date": "2026-10-14",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "Kimi-K2.7-Code",
-      "version": "2026-06-12",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-10-03",
-      "replacement": "—",
-      "raw_retirement_date": "2026-10-03",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
