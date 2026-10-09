@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-08",
+  "date": "2026-10-09",
   "records": [
     {
       "model": "gpt-image-1",
@@ -63,17 +63,6 @@
       "retirement_date": "2026-10-15",
       "replacement": "—",
       "raw_retirement_date": "2026-10-15",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "gpt-4.1-nano",
-      "version": "2025-04-14",
-      "lifecycle": "Deprecated",
-      "retirement_date": "2026-10-14",
-      "replacement": "—",
-      "raw_retirement_date": "2026-10-14",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
