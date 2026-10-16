@@ -1,6 +1,39 @@
 {
-  "date": "2026-10-15",
+  "date": "2026-10-16",
   "records": [
+    {
+      "model": "codex-mini",
+      "version": "2025-05-16",
+      "lifecycle": "Deprecated",
+      "retirement_date": "2026-11-15",
+      "replacement": "—",
+      "raw_retirement_date": "2026-11-15",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "claude-haiku-4-5",
+      "version": "1",
+      "lifecycle": "GA",
+      "retirement_date": "2026-11-15",
+      "replacement": "—",
+      "raw_retirement_date": "2026-11-15",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "claude-haiku-4-5",
+      "version": "2",
+      "lifecycle": "GA",
+      "retirement_date": "2026-11-15",
+      "replacement": "—",
+      "raw_retirement_date": "2026-11-15",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "gpt-image-1",
       "version": "2025-04-15",
@@ -19,50 +52,6 @@
       "retirement_date": "2026-10-16",
       "replacement": "coherelabs-command-a-plus-05-2026-fp8 1 , coherelabs-command-a-plus-05-2026-bf16 1 , coherelabs-command-a-plus-05-2026-w4a4 1",
       "raw_retirement_date": "2026-10-16",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "gpt-4o-mini-transcribe",
-      "version": "2025-03-20",
-      "lifecycle": "GA",
-      "retirement_date": "2026-10-15",
-      "replacement": "—",
-      "raw_retirement_date": "2026-10-15",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "gpt-4o-mini-tts",
-      "version": "2025-03-20",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-10-15",
-      "replacement": "—",
-      "raw_retirement_date": "2026-10-15",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "gpt-4o-transcribe",
-      "version": "2025-03-20",
-      "lifecycle": "GA",
-      "retirement_date": "2026-10-15",
-      "replacement": "—",
-      "raw_retirement_date": "2026-10-15",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "sora-2",
-      "version": "2025-12-08",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-10-15",
-      "replacement": "—",
-      "raw_retirement_date": "2026-10-15",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
