@@ -1,6 +1,83 @@
 {
-  "date": "2026-10-19",
+  "date": "2026-10-20",
   "records": [
+    {
+      "model": "o1",
+      "version": "2024-12-17",
+      "lifecycle": "Deprecated",
+      "retirement_date": "2026-11-19",
+      "replacement": "gpt-5.6-sol",
+      "raw_retirement_date": "2026-11-19",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "o1-pro",
+      "version": "2025-03-19",
+      "lifecycle": "Deprecated",
+      "retirement_date": "2026-11-19",
+      "replacement": "gpt-5.6-sol",
+      "raw_retirement_date": "2026-11-19",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "o3",
+      "version": "2025-04-16",
+      "lifecycle": "Deprecated",
+      "retirement_date": "2026-11-19",
+      "replacement": "gpt-5.6-sol",
+      "raw_retirement_date": "2026-11-19",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "o3-deep-research",
+      "version": "2025-06-26",
+      "lifecycle": "Deprecated",
+      "retirement_date": "2026-11-19",
+      "replacement": "gpt-5.6-sol",
+      "raw_retirement_date": "2026-11-19",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "o3-mini",
+      "version": "2025-01-31",
+      "lifecycle": "Deprecated",
+      "retirement_date": "2026-11-19",
+      "replacement": "gpt-5.6-terra",
+      "raw_retirement_date": "2026-11-19",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "o3-pro",
+      "version": "2025-06-10",
+      "lifecycle": "Deprecated",
+      "retirement_date": "2026-11-19",
+      "replacement": "gpt-5.6-sol",
+      "raw_retirement_date": "2026-11-19",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "o4-mini",
+      "version": "2025-04-16",
+      "lifecycle": "Deprecated",
+      "retirement_date": "2026-11-19",
+      "replacement": "gpt-5.6-terra",
+      "raw_retirement_date": "2026-11-19",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "gpt-chat-latest",
       "version": "2026-05-05",
