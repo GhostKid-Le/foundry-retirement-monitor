@@ -1,6 +1,17 @@
 {
-  "date": "2026-10-24",
+  "date": "2026-10-25",
   "records": [
+    {
+      "model": "claude-opus-4-5",
+      "version": "1",
+      "lifecycle": "GA",
+      "retirement_date": "2026-11-24",
+      "replacement": "—",
+      "raw_retirement_date": "2026-11-24",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "o1",
       "version": "2024-12-17",
@@ -73,6 +84,17 @@
       "lifecycle": "Deprecated",
       "retirement_date": "2026-11-19",
       "replacement": "gpt-5.6-terra",
+      "raw_retirement_date": "2026-11-19",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": false
+    },
+    {
+      "model": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+      "version": "—",
+      "lifecycle": "GA",
+      "retirement_date": "2026-11-19",
+      "replacement": "—",
       "raw_retirement_date": "2026-11-19",
       "conflict": "No",
       "conflict_note": "",
