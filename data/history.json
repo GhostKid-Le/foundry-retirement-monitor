@@ -1,6 +1,17 @@
 {
-  "date": "2026-10-30",
+  "date": "2026-10-31",
   "records": [
+    {
+      "model": "claude-sonnet-4-5",
+      "version": "1",
+      "lifecycle": "GA",
+      "retirement_date": "2026-11-30",
+      "replacement": "claude-sonnet-5-5",
+      "raw_retirement_date": "2026-11-30",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "claude-opus-4-5",
       "version": "1",
