@@ -1,6 +1,17 @@
 {
-  "date": "2026-11-07",
+  "date": "2026-11-08",
   "records": [
+    {
+      "model": "gpt-chat-latest",
+      "version": "2026-05-28",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-12-08",
+      "replacement": "—",
+      "raw_retirement_date": "2026-12-08",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "DeepSeek-V4-Flash-0731",
       "version": "2026-07-31",
