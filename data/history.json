@@ -1,6 +1,28 @@
 {
-  "date": "2026-11-08",
+  "date": "2026-11-09",
   "records": [
+    {
+      "model": "Ministral-3B",
+      "version": "1",
+      "lifecycle": "GA",
+      "retirement_date": "2026-12-09",
+      "replacement": "ministral-ministral-4b-instruct",
+      "raw_retirement_date": "2026-12-09",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "mistral-medium-2505",
+      "version": "1",
+      "lifecycle": "GA",
+      "retirement_date": "2026-12-09",
+      "replacement": "mistral-medium-3-5",
+      "raw_retirement_date": "2026-12-09",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "gpt-chat-latest",
       "version": "2026-05-28",
@@ -10,7 +32,7 @@
       "raw_retirement_date": "2026-12-08",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "DeepSeek-V4-Flash-0731",
