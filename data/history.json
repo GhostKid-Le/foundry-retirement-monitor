@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-09",
+  "date": "2026-11-10",
   "records": [
     {
       "model": "Ministral-3B",
@@ -10,7 +10,7 @@
       "raw_retirement_date": "2026-12-09",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "mistral-medium-2505",
@@ -21,7 +21,7 @@
       "raw_retirement_date": "2026-12-09",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "gpt-chat-latest",
