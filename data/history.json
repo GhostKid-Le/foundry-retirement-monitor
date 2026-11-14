@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-13",
+  "date": "2026-11-14",
   "records": [
     {
       "model": "Ministral-3B",
@@ -52,17 +52,6 @@
       "retirement_date": "2026-11-30",
       "replacement": "claude-sonnet-5-5",
       "raw_retirement_date": "2026-11-30",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "claude-opus-4-5",
-      "version": "1",
-      "lifecycle": "GA",
-      "retirement_date": "2026-11-24",
-      "replacement": "—",
-      "raw_retirement_date": "2026-11-24",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
@@ -192,28 +181,6 @@
       "model": "codex-mini",
       "version": "2025-05-16",
       "lifecycle": "Deprecated",
-      "retirement_date": "2026-11-15",
-      "replacement": "—",
-      "raw_retirement_date": "2026-11-15",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "claude-haiku-4-5",
-      "version": "1",
-      "lifecycle": "GA",
-      "retirement_date": "2026-11-15",
-      "replacement": "—",
-      "raw_retirement_date": "2026-11-15",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "claude-haiku-4-5",
-      "version": "2",
-      "lifecycle": "GA",
       "retirement_date": "2026-11-15",
       "replacement": "—",
       "raw_retirement_date": "2026-11-15",
