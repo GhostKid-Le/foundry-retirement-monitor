@@ -1,6 +1,61 @@
 {
-  "date": "2026-11-14",
+  "date": "2026-11-15",
   "records": [
+    {
+      "model": "Cohere-parse-v5",
+      "version": "1",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-12-15",
+      "replacement": "—",
+      "raw_retirement_date": "2026-12-15",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "gpt-realtime-mini",
+      "version": "2025-12-15",
+      "lifecycle": "GA",
+      "retirement_date": "2026-12-15",
+      "replacement": "—",
+      "raw_retirement_date": "2026-12-15",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "tts",
+      "version": "001",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-12-15",
+      "replacement": "—",
+      "raw_retirement_date": "2026-12-15",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "tts-hd",
+      "version": "001",
+      "lifecycle": "GA",
+      "retirement_date": "2026-12-15",
+      "replacement": "—",
+      "raw_retirement_date": "2026-12-15",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
+      "model": "whisper",
+      "version": "001",
+      "lifecycle": "GA",
+      "retirement_date": "2026-12-15",
+      "replacement": "—",
+      "raw_retirement_date": "2026-12-15",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "Ministral-3B",
       "version": "1",
