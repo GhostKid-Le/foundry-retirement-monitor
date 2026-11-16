@@ -1,6 +1,17 @@
 {
-  "date": "2026-11-15",
+  "date": "2026-11-16",
   "records": [
+    {
+      "model": "gpt-image-1.5",
+      "version": "2025-12-16",
+      "lifecycle": "GA",
+      "retirement_date": "2026-12-16",
+      "replacement": "—",
+      "raw_retirement_date": "2026-12-16",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
     {
       "model": "Cohere-parse-v5",
       "version": "1",
@@ -10,7 +21,7 @@
       "raw_retirement_date": "2026-12-15",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "gpt-realtime-mini",
@@ -21,7 +32,7 @@
       "raw_retirement_date": "2026-12-15",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "tts",
@@ -32,7 +43,7 @@
       "raw_retirement_date": "2026-12-15",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "tts-hd",
@@ -43,7 +54,7 @@
       "raw_retirement_date": "2026-12-15",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "whisper",
@@ -54,7 +65,7 @@
       "raw_retirement_date": "2026-12-15",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": true
+      "is_new": false
     },
     {
       "model": "Ministral-3B",
@@ -228,17 +239,6 @@
       "retirement_date": "2026-11-17",
       "replacement": "—",
       "raw_retirement_date": "2026-11-17",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "codex-mini",
-      "version": "2025-05-16",
-      "lifecycle": "Deprecated",
-      "retirement_date": "2026-11-15",
-      "replacement": "—",
-      "raw_retirement_date": "2026-11-15",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
