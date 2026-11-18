@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-17",
+  "date": "2026-11-18",
   "records": [
     {
       "model": "gpt-image-1.5",
@@ -217,28 +217,6 @@
       "retirement_date": "2026-11-19",
       "replacement": "—",
       "raw_retirement_date": "2026-11-19",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "gpt-chat-latest",
-      "version": "2026-05-05",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-11-17",
-      "replacement": "—",
-      "raw_retirement_date": "2026-11-17",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "gpt-chat-latest",
-      "version": "2026-06-24",
-      "lifecycle": "Preview",
-      "retirement_date": "2026-11-17",
-      "replacement": "—",
-      "raw_retirement_date": "2026-11-17",
       "conflict": "No",
       "conflict_note": "",
       "is_new": false
