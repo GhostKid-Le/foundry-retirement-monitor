@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-19",
+  "date": "2026-11-20",
   "records": [
     {
       "model": "Cohere-parse-v5",
@@ -13,15 +13,26 @@
       "is_new": false
     },
     {
-      "model": "gpt-realtime-mini",
-      "version": "2025-12-15",
-      "lifecycle": "GA",
+      "model": "DeepSeek-V4-Pro-0813",
+      "version": "2026-08-13",
+      "lifecycle": "Preview",
       "retirement_date": "2026-12-15",
       "replacement": "—",
       "raw_retirement_date": "2026-12-15",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": false
+      "is_new": true
+    },
+    {
+      "model": "DeepSeek-V4.1-Flash",
+      "version": "2026-09-10",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-12-15",
+      "replacement": "—",
+      "raw_retirement_date": "2026-12-15",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
     },
     {
       "model": "tts",
@@ -90,6 +101,17 @@
       "is_new": false
     },
     {
+      "model": "MAI-Transcribe-2-Streaming",
+      "version": "2026-08-06",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-12-04",
+      "replacement": "—",
+      "raw_retirement_date": "2026-12-04",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
+    },
+    {
       "model": "DeepSeek-V4-Flash-0731",
       "version": "2026-07-31",
       "lifecycle": "Preview",
@@ -112,103 +134,37 @@
       "is_new": false
     },
     {
-      "model": "o1",
-      "version": "2024-12-17",
-      "lifecycle": "Deprecated",
-      "retirement_date": "2026-11-19",
-      "replacement": "gpt-5.6-sol 4",
-      "raw_retirement_date": "2026-11-19",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "o1-pro",
-      "version": "2025-03-19",
-      "lifecycle": "Deprecated",
-      "retirement_date": "2026-11-19",
-      "replacement": "gpt-5.6-sol 4",
-      "raw_retirement_date": "2026-11-19",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "o3",
-      "version": "2025-04-16",
-      "lifecycle": "Deprecated",
-      "retirement_date": "2026-11-19",
-      "replacement": "gpt-5.6-sol 4",
-      "raw_retirement_date": "2026-11-19",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "o3-deep-research",
-      "version": "2025-06-26",
-      "lifecycle": "Deprecated",
-      "retirement_date": "2026-11-19",
-      "replacement": "gpt-5.6-sol 4",
-      "raw_retirement_date": "2026-11-19",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "o3-mini",
-      "version": "2025-01-31",
-      "lifecycle": "Deprecated",
-      "retirement_date": "2026-11-19",
-      "replacement": "gpt-5.6-terra 4",
-      "raw_retirement_date": "2026-11-19",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "o3-pro",
-      "version": "2025-06-10",
-      "lifecycle": "Deprecated",
-      "retirement_date": "2026-11-19",
-      "replacement": "gpt-5.6-sol 4",
-      "raw_retirement_date": "2026-11-19",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "o4-mini",
-      "version": "2025-04-16",
-      "lifecycle": "Deprecated",
-      "retirement_date": "2026-11-19",
-      "replacement": "gpt-5.6-terra 4",
-      "raw_retirement_date": "2026-11-19",
-      "conflict": "No",
-      "conflict_note": "",
-      "is_new": false
-    },
-    {
-      "model": "Llama-4-Maverick-17B-128E-Instruct-FP8",
-      "version": "—",
-      "lifecycle": "GA",
-      "retirement_date": "2026-11-19",
+      "model": "MAI-Image-2.5",
+      "version": "2026-06-02",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-11-24",
       "replacement": "—",
-      "raw_retirement_date": "2026-11-19",
+      "raw_retirement_date": "2026-11-24",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": false
+      "is_new": true
     },
     {
-      "model": "Llama-4-Maverick-17B-128E-Instruct-FP8",
-      "version": "—",
-      "lifecycle": "GA",
-      "retirement_date": "2026-11-19",
+      "model": "MAI-Image-2.5-Flash",
+      "version": "2026-06-02",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-11-24",
       "replacement": "—",
-      "raw_retirement_date": "2026-11-19",
+      "raw_retirement_date": "2026-11-24",
       "conflict": "No",
       "conflict_note": "",
-      "is_new": false
+      "is_new": true
+    },
+    {
+      "model": "MAI-Image-2.5-Pro",
+      "version": "2026-06-19",
+      "lifecycle": "Preview",
+      "retirement_date": "2026-11-24",
+      "replacement": "—",
+      "raw_retirement_date": "2026-11-24",
+      "conflict": "No",
+      "conflict_note": "",
+      "is_new": true
     }
   ]
 }
